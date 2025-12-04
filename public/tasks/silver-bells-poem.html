@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silver Bells - Christmas Poem</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes snowfall {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            line-height: 1.8;
+            padding: 40px 20px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .snowflake {
+            position: fixed;
+            color: white;
+            font-size: 1.5em;
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 1;
+            animation: snowfall linear infinite;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 250, 250, 0.98) 100%);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.3);
+            padding: 50px;
+            position: relative;
+            z-index: 2;
+            border: 3px solid #c41e3a;
+        }
+
+        .container::before {
+            content: "🎄";
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3em;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        h1 {
+            text-align: center;
+            color: #c41e3a;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #c41e3a, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .author {
+            text-align: center;
+            color: #2c5530;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        .stanza {
+            margin: 30px 0;
+            padding: 25px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stanza:hover {
+            background: linear-gradient(135deg, #ffe5e5 0%, #ffcccc 100%);
+            border-color: #c41e3a;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(196, 30, 58, 0.3);
+        }
+
+        .stanza.learned {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-color: #2e7d32;
+        }
+
+        .stanza.learned::before {
+            content: "✓";
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #2e7d32;
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .stanza-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #c41e3a 0%, #ff6b6b 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1em;
+            box-shadow: 0 4px 10px rgba(196, 30, 58, 0.4);
+        }
+
+        .stanza.learned .stanza-number {
+            background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
+            box-shadow: 0 4px 10px rgba(46, 125, 50, 0.4);
+        }
+
+        .stanza-lines {
+            display: inline-block;
+            width: calc(100% - 70px);
+            vertical-align: top;
+        }
+
+        .stanza-line {
+            margin: 8px 0;
+            font-size: 1.15em;
+            color: #2c3e50;
+            padding-left: 10px;
+            font-weight: 500;
+        }
+
+        .stanza.learned .stanza-line {
+            color: #2e7d32;
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .checkbox-container {
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        .checkbox-label {
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.95em;
+            color: #7f8c8d;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-label:hover {
+            color: #c41e3a;
+            transform: scale(1.05);
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            margin-right: 8px;
+            cursor: pointer;
+            accent-color: #2e7d32;
+        }
+
+        .stanza.learned .checkbox-label {
+            color: #2e7d32;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            margin: 40px 0;
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 35px;
+            overflow: hidden;
+            box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.2);
+            border: 2px solid #c41e3a;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #c41e3a 0%, #2e7d32 50%, #4caf50 100%);
+            height: 100%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            color: #2c3e50;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .stats-panel {
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+            border-radius: 12px;
+            border: 2px solid #c41e3a;
+        }
+
+        .stats-panel h3 {
+            color: #c41e3a;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-item .label {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .stat-item .value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #c41e3a;
+        }
+
+        .stanza-stats {
+            margin-top: 10px;
+            font-size: 0.85em;
+            color: #666;
+            font-style: italic;
+        }
+
+        .stanza-stats.learned {
+            color: #2e7d32;
+        }
+
+        .details-button {
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: #c41e3a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .details-button:hover {
+            background: #a0172a;
+        }
+
+        .details-panel {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .details-panel.show {
+            display: block;
+        }
+
+        .details-panel table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .details-panel th,
+        .details-panel td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .details-panel th {
+            background: #f0f0f0;
+            font-weight: 600;
+            color: #c41e3a;
+        }
+
+        .reset-button {
+            display: block;
+            margin: 30px auto;
+            padding: 14px 35px;
+            background: linear-gradient(135deg, #c41e3a 0%, #ff6b6b 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(196, 30, 58, 0.4);
+        }
+
+        .reset-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(196, 30, 58, 0.6);
+        }
+
+        .decoration {
+            position: absolute;
+            font-size: 2em;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .decoration.top-left { top: 20px; left: 20px; }
+        .decoration.top-right { top: 20px; right: 20px; }
+        .decoration.bottom-left { bottom: 20px; left: 20px; }
+        .decoration.bottom-right { bottom: 20px; right: 20px; }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2.2em;
+            }
+
+            .stanza {
+                padding: 20px;
+            }
+
+            .stanza-lines {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .stanza-number {
+                display: block;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="decoration top-left">❄</div>
+        <div class="decoration top-right">⭐</div>
+        <div class="decoration bottom-left">🎁</div>
+        <div class="decoration bottom-right">🔔</div>
+
+        <h1>Silver Bells</h1>
+        <div class="author">Christmas Song</div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%">
+                <span id="progressText">0%</span>
+            </div>
+        </div>
+        <div class="progress-text" id="progressLabel">Learned stanzas: 0 of 12</div>
+
+        <div class="stats-panel">
+            <h3>📊 Learning Statistics</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="label">Learned Stanzas</div>
+                    <div class="value" id="statLearned">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Remaining</div>
+                    <div class="value" id="statRemaining">12</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Progress</div>
+                    <div class="value" id="statProgress">0%</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Time Spent</div>
+                    <div class="value" id="statTime">0 min</div>
+                </div>
+            </div>
+            <button class="details-button" onclick="toggleDetails()">Show Details</button>
+            <div class="details-panel" id="detailsPanel">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Stanza</th>
+                            <th>Status</th>
+                            <th>Learned Date</th>
+                            <th>Time Spent</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detailsTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="poem-container">
+            <!-- Stanzas will be added via JavaScript -->
+        </div>
+
+        <button class="reset-button" onclick="resetProgress()">Reset Progress</button>
+    </div>
+
+    <script>
+        const poem = [
+            ["Hark how the bells, sweet silver bells", "All seem to say, \"Throw cares away\"", "Christmas is here, bringing good cheer", "To young and old, meek and the bold"],
+            ["Ding-dong, ding-dong, that is their song", "With joyful ring, all caroling", "One seems to hear, words of good cheer", "From ev'rywhere, filling the air"],
+            ["Ding, dong, ding", "Ding, dong", "", ""],
+            ["Oh, how they pound, raising the sound", "O'er hill and dale, telling their tale", "Gaily they ring while people sing", "Songs of good cheer, Christmas is here"],
+            ["Merry, merry, merry, merry Christmas", "Merry, merry, merry, merry Christmas", "", ""],
+            ["Hark how the bells, sweet silver bells", "All seem to say, \"Throw cares away\"", "Christmas is here, bringing good cheer", "To young and old, meek and the bold"],
+            ["Ding-dong, ding-dong, that is their song", "With joyful ring, all caroling", "One seems to hear, words of good cheer", "From ev'rywhere, filling the air"],
+            ["Merry, merry, merry, merry Christmas", "Merry, merry, merry, merry Christmas", "", ""],
+            ["On, on they send, on without end", "Their joyful tone to ev'ry home", "", ""],
+            ["Ding, dong, ding, dong, ding", "Ding, dong, ding, dong, ding", "", ""],
+            ["Christmas is here, bringing good cheer", "To young and old, meek and the bold", "Ding-dong, ding-dong, that is their song", "With joyful ring, all caroling"]
+        ];
+
+        // Filter out empty stanzas
+        const validStanzas = poem.filter(stanza => stanza.some(line => line.trim()));
+
+        const STORAGE_KEY = 'silver_bells_poem_progress';
+        const STORAGE_STATS_KEY = 'silver_bells_poem_stats';
+        const TOTAL_STANZAS = validStanzas.length;
+
+        function loadProgress() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            return saved ? JSON.parse(saved) : {};
+        }
+
+        function loadStats() {
+            const saved = localStorage.getItem(STORAGE_STATS_KEY);
+            return saved ? JSON.parse(saved) : {};
+        }
+
+        function saveProgress(progress) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+        }
+
+        function saveStats(stats) {
+            localStorage.setItem(STORAGE_STATS_KEY, JSON.stringify(stats));
+        }
+
+        function updateProgress() {
+            const progress = loadProgress();
+            const stats = loadStats();
+            const learnedCount = Object.values(progress).filter(v => v).length;
+            const percentage = Math.round((learnedCount / TOTAL_STANZAS) * 100);
+            
+            // Update progress bar
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = percentage + '%';
+            document.getElementById('progressLabel').textContent = 
+                `Learned stanzas: ${learnedCount} of ${TOTAL_STANZAS}`;
+            
+            // Update stats panel
+            document.getElementById('statLearned').textContent = learnedCount;
+            document.getElementById('statRemaining').textContent = TOTAL_STANZAS - learnedCount;
+            document.getElementById('statProgress').textContent = percentage + '%';
+            
+            // Calculate total time
+            let totalTime = 0;
+            Object.values(stats).forEach(stat => {
+                if (stat && stat.timeSpent) {
+                    totalTime += stat.timeSpent;
+                }
+            });
+            const minutes = Math.floor(totalTime / 60000);
+            document.getElementById('statTime').textContent = minutes > 0 ? `${minutes} min` : '< 1 min';
+            
+            // Update details table
+            updateDetailsTable(progress, stats);
+        }
+
+        function updateDetailsTable(progress, stats) {
+            const tbody = document.getElementById('detailsTableBody');
+            tbody.innerHTML = '';
+            
+            validStanzas.forEach((stanza, index) => {
+                const row = document.createElement('tr');
+                const isLearned = progress[index] || false;
+                const stat = stats[index] || {};
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${isLearned ? '<span style="color: #2e7d32; font-weight: bold;">✓ Learned</span>' : '<span style="color: #999;">Not learned</span>'}</td>
+                    <td>${stat.learnedAt ? new Date(stat.learnedAt).toLocaleString('en-US') : '-'}</td>
+                    <td>${stat.timeSpent ? Math.round(stat.timeSpent / 1000) + ' sec' : '-'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function toggleDetails() {
+            const panel = document.getElementById('detailsPanel');
+            const button = event.target;
+            if (panel.classList.contains('show')) {
+                panel.classList.remove('show');
+                button.textContent = 'Show Details';
+            } else {
+                panel.classList.add('show');
+                button.textContent = 'Hide Details';
+            }
+        }
+
+        function toggleStanza(stanzaIndex) {
+            const progress = loadProgress();
+            const stats = loadStats();
+            const wasLearned = progress[stanzaIndex] || false;
+            const startTime = stats[stanzaIndex]?.startTime || Date.now();
+            
+            progress[stanzaIndex] = !wasLearned;
+            
+            if (progress[stanzaIndex]) {
+                // Marking as learned
+                if (!stats[stanzaIndex]) {
+                    stats[stanzaIndex] = { startTime: Date.now() };
+                }
+            } else {
+                // Unmarking - reset stats
+                delete stats[stanzaIndex];
+            }
+            
+            // If marking as learned, save the completion time
+            if (progress[stanzaIndex] && !wasLearned) {
+                const timeSpent = Date.now() - startTime;
+                stats[stanzaIndex] = {
+                    learnedAt: Date.now(),
+                    timeSpent: timeSpent,
+                    startTime: startTime
+                };
+            }
+            
+            saveProgress(progress);
+            saveStats(stats);
+            
+            const stanzaElement = document.getElementById(`stanza-${stanzaIndex}`);
+            const checkbox = document.getElementById(`checkbox-${stanzaIndex}`);
+            
+            if (progress[stanzaIndex]) {
+                stanzaElement.classList.add('learned');
+                const stat = stats[stanzaIndex];
+                const statDiv = stanzaElement.querySelector('.stanza-stats');
+                if (statDiv) {
+                    statDiv.textContent = `Learned: ${new Date(stat.learnedAt).toLocaleString('en-US')}`;
+                    statDiv.classList.add('learned');
+                }
+            } else {
+                stanzaElement.classList.remove('learned');
+                const statDiv = stanzaElement.querySelector('.stanza-stats');
+                if (statDiv) {
+                    statDiv.textContent = '';
+                    statDiv.classList.remove('learned');
+                }
+            }
+            
+            checkbox.checked = progress[stanzaIndex];
+            updateProgress();
+        }
+
+        function resetProgress() {
+            if (confirm('Are you sure you want to reset all progress?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                localStorage.removeItem(STORAGE_STATS_KEY);
+                renderPoem();
+                updateProgress();
+            }
+        }
+
+        function renderPoem() {
+            const container = document.getElementById('poem-container');
+            const progress = loadProgress();
+            
+            container.innerHTML = '';
+            
+            validStanzas.forEach((stanza, index) => {
+                const stanzaDiv = document.createElement('div');
+                stanzaDiv.className = 'stanza';
+                stanzaDiv.id = `stanza-${index}`;
+                
+                if (progress[index]) {
+                    stanzaDiv.classList.add('learned');
+                }
+                
+                const numberSpan = document.createElement('span');
+                numberSpan.className = 'stanza-number';
+                numberSpan.textContent = index + 1;
+                
+                const linesDiv = document.createElement('div');
+                linesDiv.className = 'stanza-lines';
+                
+                stanza.forEach(line => {
+                    if (line.trim()) {
+                        const lineDiv = document.createElement('div');
+                        lineDiv.className = 'stanza-line';
+                        lineDiv.textContent = line;
+                        linesDiv.appendChild(lineDiv);
+                    }
+                });
+                
+                const checkboxContainer = document.createElement('div');
+                checkboxContainer.className = 'checkbox-container';
+                
+                const label = document.createElement('label');
+                label.className = 'checkbox-label';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = `checkbox-${index}`;
+                checkbox.checked = progress[index] || false;
+                checkbox.onchange = () => toggleStanza(index);
+                
+                label.appendChild(checkbox);
+                label.appendChild(document.createTextNode('Learned'));
+                
+                checkboxContainer.appendChild(label);
+                
+                // Add stats display
+                const statsDiv = document.createElement('div');
+                statsDiv.className = 'stanza-stats';
+                if (progress[index]) {
+                    const stats = loadStats();
+                    const stat = stats[index];
+                    if (stat && stat.learnedAt) {
+                        statsDiv.textContent = `Learned: ${new Date(stat.learnedAt).toLocaleString('en-US')}`;
+                        statsDiv.classList.add('learned');
+                    }
+                }
+                checkboxContainer.appendChild(statsDiv);
+                
+                linesDiv.appendChild(checkboxContainer);
+                
+                stanzaDiv.appendChild(numberSpan);
+                stanzaDiv.appendChild(linesDiv);
+                
+                container.appendChild(stanzaDiv);
+            });
+        }
+
+        // Create snowflakes
+        function createSnowflakes() {
+            const snowflakes = ['❄', '❅', '❆', '✻', '✼'];
+            const container = document.body;
+            
+            for (let i = 0; i < 30; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.textContent = snowflakes[Math.floor(Math.random() * snowflakes.length)];
+                snowflake.style.left = Math.random() * 100 + '%';
+                snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                snowflake.style.animationDelay = Math.random() * 2 + 's';
+                snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+                container.appendChild(snowflake);
+            }
+        }
+
+        // Initialize
+        createSnowflakes();
+        renderPoem();
+        updateProgress();
+    </script>
+</body>
+</html>
+

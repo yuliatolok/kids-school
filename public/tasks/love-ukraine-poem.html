@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Любіть Україну - В. Сосюра</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+            color: #2c3e50;
+            line-height: 1.8;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 50px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a5490;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .author {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        .stanza {
+            margin: 30px 0;
+            padding: 25px;
+            border-radius: 12px;
+            background: #f8f9fa;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .stanza:hover {
+            background: #f0f4f8;
+            border-color: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+
+        .stanza.learned {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+
+        .stanza.learned::before {
+            content: "✓";
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #4caf50;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .stanza-number {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 0.9em;
+        }
+
+        .stanza.learned .stanza-number {
+            background: #4caf50;
+        }
+
+        .stanza-lines {
+            display: inline-block;
+            width: calc(100% - 60px);
+            vertical-align: top;
+        }
+
+        .stanza-line {
+            margin: 8px 0;
+            font-size: 1.15em;
+            color: #2c3e50;
+            padding-left: 10px;
+        }
+
+        .stanza.learned .stanza-line {
+            color: #2e7d32;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .checkbox-container {
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        .checkbox-label {
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.95em;
+            color: #7f8c8d;
+            user-select: none;
+        }
+
+        .checkbox-label:hover {
+            color: #3498db;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            cursor: pointer;
+            accent-color: #4caf50;
+        }
+
+        .stanza.learned .checkbox-label {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            margin: 40px 0;
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 30px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #4caf50 0%, #66bb6a 100%);
+            height: 100%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            color: #7f8c8d;
+            font-size: 1em;
+        }
+
+        .stats-panel {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .stats-panel h3 {
+            color: #1a5490;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-item .label {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .stat-item .value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #1a5490;
+        }
+
+        .stanza-stats {
+            margin-top: 10px;
+            font-size: 0.85em;
+            color: #666;
+            font-style: italic;
+        }
+
+        .stanza-stats.learned {
+            color: #4caf50;
+        }
+
+        .details-button {
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .details-button:hover {
+            background: #2980b9;
+        }
+
+        .details-panel {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .details-panel.show {
+            display: block;
+        }
+
+        .details-panel table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .details-panel th,
+        .details-panel td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .details-panel th {
+            background: #f0f0f0;
+            font-weight: 600;
+            color: #1a5490;
+        }
+
+        .reset-button {
+            display: block;
+            margin: 30px auto;
+            padding: 12px 30px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .reset-button:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .stanza {
+                padding: 20px;
+            }
+
+            .stanza-lines {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .stanza-number {
+                display: block;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Любіть Україну</h1>
+        <div class="author">Володимир Сосюра</div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%">
+                <span id="progressText">0%</span>
+            </div>
+        </div>
+        <div class="progress-text" id="progressLabel">Вивчено строф: 0 з 12</div>
+
+        <div class="stats-panel">
+            <h3>📊 Статистика вивчення</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="label">Вивчено строф</div>
+                    <div class="value" id="statLearned">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Залишилось</div>
+                    <div class="value" id="statRemaining">12</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Прогрес</div>
+                    <div class="value" id="statProgress">0%</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Час вивчення</div>
+                    <div class="value" id="statTime">0 хв</div>
+                </div>
+            </div>
+            <button class="details-button" onclick="toggleDetails()">Показати деталі</button>
+            <div class="details-panel" id="detailsPanel">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Строфа</th>
+                            <th>Статус</th>
+                            <th>Дата вивчення</th>
+                            <th>Час вивчення</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detailsTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="poem-container">
+            <!-- Строфи будуть додані через JavaScript -->
+        </div>
+
+        <button class="reset-button" onclick="resetProgress()">Скинути прогрес</button>
+    </div>
+
+    <script>
+        const poem = [
+            ["Любіть Україну, як сонце любіть,", "як вітер, і трави, і води...", "В годину щасливу і в радості мить,", "любіть у годину негоди."],
+            ["Любіть Україну у сні й наяву,", "вишневу свою Україну,", "красу її, вічно живу і нову,", "і мову її солов'їну."],
+            ["Без неї — ніщо ми, як порох і дим,", "розвіяний в полі вітрами...", "Любіть Україну всім серцем своїм", "і всіми своїми ділами."],
+            ["Для нас вона в світі єдина, одна,", "як очі її ніжно-карі...", "Вона у зірках, і у вербах вона,", "і в кожному серця ударі,"],
+            ["у квітці, в пташині, в кривеньких тинах,", "у пісні у кожній, у думі,", "в дитячій усмішці, в дівочих очах", "і в стягів багряному шумі..."],
+            ["Як та купина, що горить — не згора,", "живе у стежках, у дібровах,", "у зойках гудків, і у хвилях Дніпра,", "у хмарах отих пурпурових,"],
+            ["в огні канонад, що на захід женуть", "чужинців в зелених мундирах,", "в багнетах, що в тьмі пробивають нам путь", "до весен і світлих, і щирих."],
+            ["Відкрити аудіокнигу на YouTube", "", "", ""],
+            ["Юначе! Хай буде для неї твій сміх,", "і сльози, і все до загину...", "Не можна любити народів других,", "коли ти не любиш Вкраїну!.."],
+            ["Дівчино! Як небо її голубе,", "люби її кожну хвилину...", "Коханий любить не захоче тебе,", "коли ти не любиш Вкраїну."],
+            ["Любіть у труді, у коханні, в бою,", "в цей час коли гудуть батареї", "Всім серцем любіть Україну свою,", "і вічні ми будемо з нею!"]
+        ];
+
+        // Видаляємо порожню строфу (8-ма)
+        poem.splice(7, 1);
+
+        const STORAGE_KEY = 'love_ukraine_poem_progress';
+        const STORAGE_STATS_KEY = 'love_ukraine_poem_stats';
+        const TOTAL_STANZAS = poem.length;
+
+        function loadProgress() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            return saved ? JSON.parse(saved) : {};
+        }
+
+        function loadStats() {
+            const saved = localStorage.getItem(STORAGE_STATS_KEY);
+            return saved ? JSON.parse(saved) : {};
+        }
+
+        function saveProgress(progress) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+        }
+
+        function saveStats(stats) {
+            localStorage.setItem(STORAGE_STATS_KEY, JSON.stringify(stats));
+        }
+
+        function updateProgress() {
+            const progress = loadProgress();
+            const stats = loadStats();
+            const learnedCount = Object.values(progress).filter(v => v).length;
+            const percentage = Math.round((learnedCount / TOTAL_STANZAS) * 100);
+            
+            // Update progress bar
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = percentage + '%';
+            document.getElementById('progressLabel').textContent = 
+                `Вивчено строф: ${learnedCount} з ${TOTAL_STANZAS}`;
+            
+            // Update stats panel
+            document.getElementById('statLearned').textContent = learnedCount;
+            document.getElementById('statRemaining').textContent = TOTAL_STANZAS - learnedCount;
+            document.getElementById('statProgress').textContent = percentage + '%';
+            
+            // Calculate total time
+            let totalTime = 0;
+            Object.values(stats).forEach(stat => {
+                if (stat && stat.timeSpent) {
+                    totalTime += stat.timeSpent;
+                }
+            });
+            const minutes = Math.floor(totalTime / 60000);
+            document.getElementById('statTime').textContent = minutes > 0 ? `${minutes} хв` : '< 1 хв';
+            
+            // Update details table
+            updateDetailsTable(progress, stats);
+        }
+
+        function updateDetailsTable(progress, stats) {
+            const tbody = document.getElementById('detailsTableBody');
+            tbody.innerHTML = '';
+            
+            poem.forEach((stanza, index) => {
+                const row = document.createElement('tr');
+                const isLearned = progress[index] || false;
+                const stat = stats[index] || {};
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${isLearned ? '<span style="color: #4caf50; font-weight: bold;">✓ Вивчено</span>' : '<span style="color: #999;">Не вивчено</span>'}</td>
+                    <td>${stat.learnedAt ? new Date(stat.learnedAt).toLocaleString('uk-UA') : '-'}</td>
+                    <td>${stat.timeSpent ? Math.round(stat.timeSpent / 1000) + ' сек' : '-'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function toggleDetails() {
+            const panel = document.getElementById('detailsPanel');
+            const button = event.target;
+            if (panel.classList.contains('show')) {
+                panel.classList.remove('show');
+                button.textContent = 'Показати деталі';
+            } else {
+                panel.classList.add('show');
+                button.textContent = 'Сховати деталі';
+            }
+        }
+
+        function toggleStanza(stanzaIndex) {
+            const progress = loadProgress();
+            const stats = loadStats();
+            const wasLearned = progress[stanzaIndex] || false;
+            const startTime = stats[stanzaIndex]?.startTime || Date.now();
+            
+            progress[stanzaIndex] = !wasLearned;
+            
+            if (progress[stanzaIndex]) {
+                // Marking as learned
+                if (!stats[stanzaIndex]) {
+                    stats[stanzaIndex] = { startTime: Date.now() };
+                }
+            } else {
+                // Unmarking - reset stats
+                delete stats[stanzaIndex];
+            }
+            
+            // If marking as learned, save the completion time
+            if (progress[stanzaIndex] && !wasLearned) {
+                const timeSpent = Date.now() - startTime;
+                stats[stanzaIndex] = {
+                    learnedAt: Date.now(),
+                    timeSpent: timeSpent,
+                    startTime: startTime
+                };
+            }
+            
+            saveProgress(progress);
+            saveStats(stats);
+            
+            const stanzaElement = document.getElementById(`stanza-${stanzaIndex}`);
+            const checkbox = document.getElementById(`checkbox-${stanzaIndex}`);
+            
+            if (progress[stanzaIndex]) {
+                stanzaElement.classList.add('learned');
+                const stat = stats[stanzaIndex];
+                const statDiv = stanzaElement.querySelector('.stanza-stats');
+                if (statDiv) {
+                    statDiv.textContent = `Вивчено: ${new Date(stat.learnedAt).toLocaleString('uk-UA')}`;
+                    statDiv.classList.add('learned');
+                }
+            } else {
+                stanzaElement.classList.remove('learned');
+                const statDiv = stanzaElement.querySelector('.stanza-stats');
+                if (statDiv) {
+                    statDiv.textContent = '';
+                    statDiv.classList.remove('learned');
+                }
+            }
+            
+            checkbox.checked = progress[stanzaIndex];
+            updateProgress();
+        }
+
+        function resetProgress() {
+            if (confirm('Ви впевнені, що хочете скинути весь прогрес?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                localStorage.removeItem(STORAGE_STATS_KEY);
+                renderPoem();
+                updateProgress();
+            }
+        }
+
+        function renderPoem() {
+            const container = document.getElementById('poem-container');
+            const progress = loadProgress();
+            
+            container.innerHTML = '';
+            
+            poem.forEach((stanza, index) => {
+                const stanzaDiv = document.createElement('div');
+                stanzaDiv.className = 'stanza';
+                stanzaDiv.id = `stanza-${index}`;
+                
+                if (progress[index]) {
+                    stanzaDiv.classList.add('learned');
+                }
+                
+                const numberSpan = document.createElement('span');
+                numberSpan.className = 'stanza-number';
+                numberSpan.textContent = index + 1;
+                
+                const linesDiv = document.createElement('div');
+                linesDiv.className = 'stanza-lines';
+                
+                stanza.forEach(line => {
+                    if (line.trim()) {
+                        const lineDiv = document.createElement('div');
+                        lineDiv.className = 'stanza-line';
+                        lineDiv.textContent = line;
+                        linesDiv.appendChild(lineDiv);
+                    }
+                });
+                
+                const checkboxContainer = document.createElement('div');
+                checkboxContainer.className = 'checkbox-container';
+                
+                const label = document.createElement('label');
+                label.className = 'checkbox-label';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = `checkbox-${index}`;
+                checkbox.checked = progress[index] || false;
+                checkbox.onchange = () => toggleStanza(index);
+                
+                label.appendChild(checkbox);
+                label.appendChild(document.createTextNode('Вивчено'));
+                
+                checkboxContainer.appendChild(label);
+                
+                // Add stats display
+                const statsDiv = document.createElement('div');
+                statsDiv.className = 'stanza-stats';
+                if (progress[index]) {
+                    const stats = loadStats();
+                    const stat = stats[index];
+                    if (stat && stat.learnedAt) {
+                        statsDiv.textContent = `Вивчено: ${new Date(stat.learnedAt).toLocaleString('uk-UA')}`;
+                        statsDiv.classList.add('learned');
+                    }
+                }
+                checkboxContainer.appendChild(statsDiv);
+                
+                linesDiv.appendChild(checkboxContainer);
+                
+                stanzaDiv.appendChild(numberSpan);
+                stanzaDiv.appendChild(linesDiv);
+                
+                container.appendChild(stanzaDiv);
+            });
+        }
+
+        // Ініціалізація
+        renderPoem();
+        updateProgress();
+    </script>
+</body>
+</html>
+
