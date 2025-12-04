@@ -66,12 +66,13 @@ export default function HomePage() {
       `}</style>
 
       <div style={{
-        maxWidth: "800px",
+        maxWidth: "1400px",
         width: "100%",
         textAlign: "center",
         color: "white",
         zIndex: 1,
-        position: "relative"
+        position: "relative",
+        padding: "0 40px"
       }} className="fade-in-up">
         {/* Logo/Icon */}
         <div style={{
@@ -108,10 +109,12 @@ export default function HomePage() {
         {/* Features */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "20px",
+          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+          gap: "30px",
           marginBottom: "50px",
-          textAlign: "left"
+          textAlign: "left",
+          maxWidth: "1200px",
+          margin: "0 auto 50px"
         }}>
           <div style={{
             background: "rgba(255,255,255,0.15)",
