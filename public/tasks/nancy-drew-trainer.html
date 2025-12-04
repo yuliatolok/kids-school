@@ -7,7 +7,7 @@
         body {
             margin: 0;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: #123a7a; /* blue background */
+            background: #7a1a1a; /* reddish background */
             color: #fff;
             overflow-x: hidden;
         }
@@ -26,7 +26,7 @@
         .section {
             max-width: 960px;
             margin: 16px auto 24px;
-            background: rgba(10, 20, 60, 0.95);
+            background: rgba(60, 10, 10, 0.95);
             border-radius: 18px;
             padding: 18px 22px 22px;
             box-shadow: 0 10px 24px rgba(0,0,0,0.45);
@@ -129,7 +129,7 @@
             padding: 6px 11px;
             border-radius: 999px;
             border: 1px solid rgba(255,255,255,0.45);
-            background: rgba(26, 54, 104, 0.9);
+            background: rgba(104, 26, 26, 0.9);
             color: #fff;
             font-size: 13px;
             cursor: pointer;
@@ -225,7 +225,7 @@
             padding: 6px 10px;
             border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.45);
-            background: rgba(26,54,104,0.9);
+            background: rgba(104,26,26,0.9);
             color: #fff;
             cursor: pointer;
             font-size: 13px;
@@ -234,7 +234,7 @@
         }
 
         .match-btn:hover {
-            background: rgba(73,115,189,0.95);
+            background: rgba(189,73,73,0.95);
         }
 
         .match-btn.selected {
@@ -257,7 +257,7 @@
             border: 2px solid rgba(255,255,255,0.4);
             border-radius: 8px;
             padding: 6px;
-            background: rgba(8,16,40,0.9);
+            background: rgba(40,8,8,0.9);
         }
 
         .cross-row {
@@ -278,7 +278,7 @@
             font-size: 18px;
             border-radius: 4px;
             border: 1px solid rgba(255,255,255,0.6);
-            background: rgba(18,58,122,0.9);
+            background: rgba(122,18,18,0.9);
             color: #fff;
         }
 
@@ -286,7 +286,7 @@
             width: 28px;
             height: 28px;
             margin: 1px;
-            background: rgba(4,10,25,0.9);
+            background: rgba(25,4,4,0.9);
             border-radius: 4px;
         }
 
@@ -321,7 +321,7 @@
             padding: 4px 7px;
             border-radius: 6px;
             border: 1px solid rgba(255,255,255,0.5);
-            background: rgba(26,54,104,0.95);
+            background: rgba(104,26,26,0.95);
             color: #fff;
             font-size: 13px;
             cursor: pointer;
@@ -330,7 +330,7 @@
         }
 
         .palette-btn:hover {
-            background: rgba(73,115,189,0.95);
+            background: rgba(189,73,73,0.95);
         }
 
         /* Clues */
@@ -570,30 +570,22 @@
 
     // ===== WORD LIST (короткая Nancy Drew-версия) =====
     const words = [
-        {en: "tiptoe", uaTr: "тíптоу", ua: "навшпиньки"},
-        {en: "lips", uaTr: "ліпс", ua: "губи"},
-        {en: "let go", uaTr: "лет ґоу", ua: "відпустити"},
-        {en: "tease", uaTr: "тіз", ua: "дражнити"},
-        {en: "torn", uaTr: "торн", ua: "порваний"},
-        {en: "hollow", uaTr: "хо́лоу", ua: "дупло, порожнистий"},
-        {en: "cuckoo-head", uaTr: "куку хед", ua: "чокнутий, з «кукушкою»"},
-        {en: "scared the jeepers", uaTr: "скерд зе джíперз", ua: "дуже налякала"},
-        {en: "get a clue", uaTr: "ґет е клу", ua: "нарешті щось зрозуміти"},
-        {en: "mystery", uaTr: "мíстері", ua: "загадка"},
-        {en: "diary", uaTr: "дáйрі", ua: "щоденник"},
-        {en: "squeaky steps", uaTr: "сквíкі степс", ua: "скрипучі сходинки"},
-        {en: "teeny", uaTr: "тíні", ua: "крихітний"},
-        {en: "bit", uaTr: "біт", ua: "шматочок, трішки"},
-        {en: "haunted", uaTr: "хо́нтід", ua: "з привидами"},
-        {en: "ceiling", uaTr: "сíлінґ", ua: "стеля"},
-        {en: "struggle", uaTr: "страґл", ua: "боротися, насилу робити"},
-        {en: "dictionary", uaTr: "дíкшінері", ua: "словник"},
-        {en: "scaredy", uaTr: "ске́рді", ua: "боягуз, трусишка"},
-        {en: "chime", uaTr: "чайм", ua: "дзвін, перезвін"},
-        {en: "overachieving", uaTr: "оуверачíвінґ", ua: "занадто старанний"},
-        {en: "shivered", uaTr: "шíверд", ua: "затремтів"},
-        {en: "spine-chilling", uaTr: "спайн чíлінґ", ua: "аж мороз по шкірі"},
-        {en: "says so right on the back", uaTr: "сез соу райт он зе бек", ua: "так і написано на звороті"}
+        {en: "dream", uaTr: "дрім", ua: "сон / мрія"},
+        {en: "pet", uaTr: "пет", ua: "домашній улюбленець"},
+        {en: "together", uaTr: "теґéзер", ua: "разом"},
+        {en: "sleeps over", uaTr: "сліпс óувер", ua: "залишається ночувати"},
+        {en: "called", uaTr: "колд", ua: "подзвонила / назвала"},
+        {en: "emergency", uaTr: "імéрдженсі", ua: "терміново, невідкладний випадок"},
+        {en: "right away", uaTr: "райт евéй", ua: "негайно"},
+        {en: "hill", uaTr: "хіл", ua: "пагорб"},
+        {en: "as fast as I could", uaTr: "ез фаст ез ай куд", ua: "так швидко, як могла"},
+        {en: "rose", uaTr: "роуз", ua: "піднявся / підвелася"},
+        {en: "followed", uaTr: "фóлоуд", ua: "слідували за"},
+        {en: "as", uaTr: "ез", ua: "як"},
+        {en: "full", uaTr: "фул", ua: "повний"},
+        {en: "piggy bank", uaTr: "пíґі бенк", ua: "скарбничка у вигляді свинки"},
+        {en: "even", uaTr: "íвен", ua: "навіть"},
+        {en: "fuzzy", uaTr: "фáзі", ua: "пухнастий, розмитий"}
     ];
 
     // ===== SNOW =====

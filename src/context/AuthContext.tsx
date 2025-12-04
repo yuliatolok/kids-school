@@ -69,22 +69,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const snap = await getDoc(ref);
   
       if (!snap.exists()) {
+        // kttolokik@gmail.com should be a child (Саша)
+        const role = user.email === "kttolokik@gmail.com" ? "child" : "parent";
+        
         await setDoc(ref, {
           id: user.uid,
           email: user.email,
           displayName: user.displayName,
-          role: "parent",
+          role: role,
         });
-  
+
         setAppUser({
           id: user.uid,
           displayName: user.displayName ?? "",
           email: user.email ?? "",
-          role: "parent",
+          role: role,
         });
       } else {
         const data = snap.data() as AppUser;
-        setAppUser(data);
+        // Update role if it's kttolokik@gmail.com and currently set as parent
+        if (user.email === "kttolokik@gmail.com" && data.role === "parent") {
+          await setDoc(ref, {
+            ...data,
+            role: "child",
+          });
+          setAppUser({
+            ...data,
+            role: "child",
+          });
+        } else {
+          setAppUser(data);
+        }
       }
   
       setLoading(false);
