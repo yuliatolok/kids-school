@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Nancy Drew English Trainer</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #123a7a; /* blue background */
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 10px 8px;
+            text-shadow: 0 0 10px rgba(0,0,0,0.6);
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 0;
+        }
+
+        .section {
+            max-width: 960px;
+            margin: 16px auto 24px;
+            background: rgba(10, 20, 60, 0.95);
+            border-radius: 18px;
+            padding: 18px 22px 22px;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.45);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .flashcard {
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 16px 18px;
+            margin-top: 10px;
+            background: rgba(255,255,255,0.06);
+        }
+
+        .flash-main {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .flash-extra {
+            margin-bottom: 4px;
+            font-size: 15px;
+            color: #e0e7ff;
+        }
+
+        .controls {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        button {
+            cursor: pointer;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1b243b;
+            background: #ffd54f;
+            box-shadow: 0 3px 0 #c7a235;
+            transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.15s ease;
+        }
+
+        button:hover {
+            background: #ffe082;
+        }
+
+        button:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #c7a235;
+        }
+
+        .quiz-block {
+            margin-top: 10px;
+        }
+
+        .quiz-question {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .quiz-sub {
+            font-size: 13px;
+            color: #c8d8ff;
+            margin-bottom: 6px;
+        }
+
+        .quiz-result {
+            margin-top: 8px;
+            min-height: 22px;
+            font-size: 15px;
+        }
+
+        .correct {
+            color: #c5ff90;
+        }
+
+        .incorrect {
+            color: #ffb0b0;
+        }
+
+        .small-note {
+            font-size: 12px;
+            color: #c8d8ff;
+            margin-top: 4px;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .option-btn {
+            padding: 6px 11px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.45);
+            background: rgba(26, 54, 104, 0.9);
+            color: #fff;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.15s ease, transform 0.05s ease;
+        }
+
+        .option-btn:hover {
+            background: rgba(73, 115, 189, 0.95);
+        }
+
+        .option-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Snowflakes */
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: #fff;
+            opacity: 0.85;
+            font-size: 16px;
+            pointer-events: none;
+            animation-name: fall;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            z-index: 0;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh); }
+            100% { transform: translateY(110vh); }
+        }
+
+        .garland {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            font-size: 22px;
+            z-index: 1;
+            text-shadow: 0 0 8px rgba(0,0,0,0.7);
+        }
+
+        .trees {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 42px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            font-size: 32px;
+            pointer-events: none;
+            text-shadow: 0 0 6px rgba(0,0,0,0.8);
+            z-index: 1;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            padding-bottom: 60px;
+        }
+
+        /* Match game */
+        .match-container {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .match-column {
+            flex: 1 1 200px;
+        }
+
+        .match-column h3 {
+            margin: 0 0 6px;
+            font-size: 16px;
+        }
+
+        .match-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .match-btn {
+            padding: 6px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.45);
+            background: rgba(26,54,104,0.9);
+            color: #fff;
+            cursor: pointer;
+            font-size: 13px;
+            text-align: left;
+            transition: background 0.15s ease, transform 0.05s ease, border-color 0.15s ease, opacity 0.15s ease;
+        }
+
+        .match-btn:hover {
+            background: rgba(73,115,189,0.95);
+        }
+
+        .match-btn.selected {
+            border-color: #ffe082;
+            background: rgba(255,212,79,0.9);
+            color: #1b243b;
+        }
+
+        .match-btn.matched {
+            background: rgba(40,120,40,0.85);
+            border-color: rgba(200,255,200,0.8);
+            opacity: 0.8;
+            cursor: default;
+        }
+
+        /* Crossword grid */
+        #cross-grid {
+            margin-top: 12px;
+            display: inline-block;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 8px;
+            padding: 6px;
+            background: rgba(8,16,40,0.9);
+        }
+
+        .cross-row {
+            display: flex;
+        }
+
+        .cross-cell {
+            width: 28px;
+            height: 28px;
+            margin: 1px;
+            box-sizing: border-box;
+        }
+
+        .cross-cell input {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-size: 18px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.6);
+            background: rgba(18,58,122,0.9);
+            color: #fff;
+        }
+
+        .cross-block {
+            width: 28px;
+            height: 28px;
+            margin: 1px;
+            background: rgba(4,10,25,0.9);
+            border-radius: 4px;
+        }
+
+        .cross-number {
+            position: relative;
+        }
+
+        .cross-number span {
+            position: absolute;
+            top: 1px;
+            left: 2px;
+            font-size: 9px;
+            color: #ffeb3b;
+        }
+
+        #cross-controls-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        /* Letter palette */
+        #cross-palette {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .palette-btn {
+            padding: 4px 7px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.5);
+            background: rgba(26,54,104,0.95);
+            color: #fff;
+            font-size: 13px;
+            cursor: pointer;
+            min-width: 22px;
+            text-align: center;
+        }
+
+        .palette-btn:hover {
+            background: rgba(73,115,189,0.95);
+        }
+
+        /* Clues */
+        #cross-clues {
+            margin-top: 10px;
+            font-size: 13px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .clue-column-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .clue-item {
+            margin-bottom: 3px;
+        }
+
+        /* Build-word game */
+        #buildword-target {
+            letter-spacing: 6px;
+            min-height: 30px;
+        }
+
+        .build-slot {
+            display: inline-block;
+            font-size: 26px;
+            font-weight: 700;
+            min-width: 20px;
+        }
+
+        /* Fireworks */
+        .fw {
+            position: fixed;
+            font-size: 24px;
+            pointer-events: none;
+            animation: fw-burst 1s ease-out forwards;
+            z-index: 999;
+        }
+
+        @keyframes fw-burst {
+            0% {
+                transform: translateY(0) scale(0.3);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-80px) scale(1.4);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="garland">
+    🎄✨⭐️✨🎄✨⭐️✨🎄
+</div>
+
+<div class="trees">
+    🎄🎄🎄🎄🎄🎄🎄🎄🎄
+</div>
+
+<div class="content-wrapper">
+    <h1>Nancy Drew English Trainer 🎄</h1>
+
+    <!-- FLASHCARDS -->
+    <div class="section">
+        <h2>Картки (flashcards)</h2>
+        <div class="controls">
+            <button id="f-prev">◀ Попереднє</button>
+            <button id="f-next">Наступне ▶</button>
+            <button id="f-rand">🎲 Випадкове</button>
+            <button id="f-toggle">Показати / сховати переклад</button>
+        </div>
+        <div class="flashcard">
+            <div id="f-en" class="flash-main"></div>
+            <div id="f-uaTr" class="flash-extra"></div>
+            <div id="f-ua" class="flash-extra"></div>
+        </div>
+        <div class="small-note">
+            Спочатку читає англійське слово й вимову, намагається згадати переклад, потім натискає кнопку.
+        </div>
+    </div>
+
+    <!-- QUIZ 1: EN -> UA -->
+    <div class="section">
+        <h2>Тест 1: переклад з англійської на українську</h2>
+        <div class="quiz-block">
+            <div id="q1-question" class="quiz-question"></div>
+            <div id="q1-sub" class="quiz-sub"></div>
+            <div id="q1-options" class="options"></div>
+            <div class="controls">
+                <button id="q1-new">Нове запитання</button>
+            </div>
+            <div id="q1-result" class="quiz-result"></div>
+        </div>
+    </div>
+
+    <!-- QUIZ 2: UA -> EN -->
+    <div class="section">
+        <h2>Тест 2: переклад з української на англійську</h2>
+        <div class="quiz-block">
+            <div id="q2-question" class="quiz-question"></div>
+            <div id="q2-sub" class="quiz-sub"></div>
+            <div id="q2-options" class="options"></div>
+            <div class="controls">
+                <button id="q2-new">Нове запитання</button>
+            </div>
+            <div id="q2-result" class="quiz-result"></div>
+        </div>
+    </div>
+
+    <!-- QUIZ 3: TRUE/FALSE PAIRS -->
+    <div class="section">
+        <h2>Тест 3: правильно чи ні?</h2>
+        <div class="small-note">
+            Чи правильно поєднані слово й переклад? Обери «Так, правильно» або «Ні, неправильно».
+        </div>
+        <div class="quiz-block">
+            <div id="q3-question" class="quiz-question"></div>
+            <div id="q3-sub" class="quiz-sub"></div>
+            <div class="controls">
+                <button id="q3-yes">Так, правильно</button>
+                <button id="q3-no">Ні, неправильно</button>
+                <button id="q3-new">Нове запитання</button>
+            </div>
+            <div id="q3-result" class="quiz-result"></div>
+        </div>
+    </div>
+
+    <!-- MATCH GAME -->
+    <div class="section">
+        <h2>Гра: знайди пару (англійська ↔ українська)</h2>
+        <div class="small-note">
+            Натисни англійське слово, потім його переклад українською. Збери всі пари.
+        </div>
+        <div class="match-container">
+            <div class="match-column">
+                <h3>English</h3>
+                <div id="match-en" class="match-list"></div>
+            </div>
+            <div class="match-column">
+                <h3>Українська</h3>
+                <div id="match-ua" class="match-list"></div>
+            </div>
+        </div>
+        <div class="controls">
+            <button id="match-new">Нова гра</button>
+        </div>
+        <div id="match-result" class="quiz-result"></div>
+    </div>
+
+    <!-- BUILD WORD GAME -->
+    <div class="section">
+        <h2>Гра: склади англійське слово з букв</h2>
+        <div class="small-note">
+            Подивись на переклад і вимову. Натискай на букви, щоб скласти англійське слово.
+            Якщо все правильно — буде феєрверк 🎆
+        </div>
+
+        <div id="buildword-hint" class="quiz-sub"></div>
+        <div id="buildword-target" class="quiz-question"></div>
+        <div id="buildword-letters" class="options"></div>
+
+        <div class="controls">
+            <button id="buildword-clear">Очистити</button>
+            <button id="buildword-new">Нове слово</button>
+        </div>
+
+        <div id="buildword-result" class="quiz-result"></div>
+    </div>
+
+    <!-- BIG CROSSWORD -->
+    <div class="section">
+        <h2>Великий кросворд</h2>
+        <div class="small-note">
+            У кросворді є слова по горизонталі й вертикалі. Клікай на клітинку, потім на букву в палітрі
+            або набирай на клавіатурі.
+        </div>
+
+        <div id="cross-grid"></div>
+
+        <div id="cross-controls-row">
+            <button id="cross-new">Новий кросворд</button>
+            <button id="cross-check">Перевірити</button>
+            <button id="cross-show">Показати відповіді</button>
+        </div>
+
+        <div class="small-note">
+            Палітра букв:
+        </div>
+        <div id="cross-palette"></div>
+
+        <div id="cross-clues"></div>
+
+        <div id="cross-result" class="quiz-result"></div>
+    </div>
+</div>
+
+<script>
+    // ===== STATS =====
+    const stats = {
+        startedAt: Date.now(),
+        correct: 0,
+        incorrect: 0,
+    };
+
+    function registerCorrect() {
+        stats.correct++;
+    }
+
+    function registerIncorrect() {
+        stats.incorrect++;
+    }
+
+    function sendStatsToParent() {
+        const payload = {
+            type: "taskResult",
+            correct: stats.correct,
+            incorrect: stats.incorrect,
+            timeMs: Date.now() - stats.startedAt,
+        };
+
+        // Send result to parent React app (TaskPage)
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage(payload, "*");
+        }
+    }
+
+    // Optional: call manually from a "Finish" button if захочеш
+    // window.sendStatsToParent = sendStatsToParent;
+
+    // When user closes page / переходить далі — відправляємо
+    window.addEventListener("beforeunload", sendStatsToParent);
+
+    // ===== WORD LIST (короткая Nancy Drew-версия) =====
+    const words = [
+        {en: "tiptoe", uaTr: "тíптоу", ua: "навшпиньки"},
+        {en: "lips", uaTr: "ліпс", ua: "губи"},
+        {en: "let go", uaTr: "лет ґоу", ua: "відпустити"},
+        {en: "tease", uaTr: "тіз", ua: "дражнити"},
+        {en: "torn", uaTr: "торн", ua: "порваний"},
+        {en: "hollow", uaTr: "хо́лоу", ua: "дупло, порожнистий"},
+        {en: "cuckoo-head", uaTr: "куку хед", ua: "чокнутий, з «кукушкою»"},
+        {en: "scared the jeepers", uaTr: "скерд зе джíперз", ua: "дуже налякала"},
+        {en: "get a clue", uaTr: "ґет е клу", ua: "нарешті щось зрозуміти"},
+        {en: "mystery", uaTr: "мíстері", ua: "загадка"},
+        {en: "diary", uaTr: "дáйрі", ua: "щоденник"},
+        {en: "squeaky steps", uaTr: "сквíкі степс", ua: "скрипучі сходинки"},
+        {en: "teeny", uaTr: "тíні", ua: "крихітний"},
+        {en: "bit", uaTr: "біт", ua: "шматочок, трішки"},
+        {en: "haunted", uaTr: "хо́нтід", ua: "з привидами"},
+        {en: "ceiling", uaTr: "сíлінґ", ua: "стеля"},
+        {en: "struggle", uaTr: "страґл", ua: "боротися, насилу робити"},
+        {en: "dictionary", uaTr: "дíкшінері", ua: "словник"},
+        {en: "scaredy", uaTr: "ске́рді", ua: "боягуз, трусишка"},
+        {en: "chime", uaTr: "чайм", ua: "дзвін, перезвін"},
+        {en: "overachieving", uaTr: "оуверачíвінґ", ua: "занадто старанний"},
+        {en: "shivered", uaTr: "шíверд", ua: "затремтів"},
+        {en: "spine-chilling", uaTr: "спайн чíлінґ", ua: "аж мороз по шкірі"},
+        {en: "says so right on the back", uaTr: "сез соу райт он зе бек", ua: "так і написано на звороті"}
+    ];
+
+    // ===== SNOW =====
+    for (let i = 0; i < 30; i++) {
+        const span = document.createElement("span");
+        span.className = "snowflake";
+        span.textContent = "❄";
+        const duration = 10 + Math.random() * 10;
+        const delay = Math.random() * -duration;
+        const left = Math.random() * 100;
+        span.style.left = left + "vw";
+        span.style.animationDuration = duration + "s";
+        span.style.animationDelay = delay + "s";
+        document.body.appendChild(span);
+    }
+
+    // ===== FLASHCARDS =====
+    let fIndex = 0;
+    let showTranslation = true;
+    const fEn = document.getElementById("f-en");
+    const fUaTr = document.getElementById("f-uaTr");
+    const fUa = document.getElementById("f-ua");
+
+    function updateFlashcard() {
+        const w = words[fIndex];
+        fEn.textContent = w.en;
+        fUaTr.textContent = "Вимова: " + w.uaTr;
+        fUa.textContent = "Переклад: " + w.ua;
+        const disp = showTranslation ? "block" : "none";
+        fUaTr.style.display = disp;
+        fUa.style.display = disp;
+    }
+
+    document.getElementById("f-prev").onclick = () => {
+        fIndex = (fIndex - 1 + words.length) % words.length;
+        updateFlashcard();
+    };
+    document.getElementById("f-next").onclick = () => {
+        fIndex = (fIndex + 1) % words.length;
+        updateFlashcard();
+    };
+    document.getElementById("f-rand").onclick = () => {
+        fIndex = Math.floor(Math.random() * words.length);
+        updateFlashcard();
+    };
+    document.getElementById("f-toggle").onclick = () => {
+        showTranslation = !showTranslation;
+        updateFlashcard();
+    };
+
+    // ===== HELPER: SHUFFLE =====
+    function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    // ===== QUIZ 1: EN -> UA =====
+    const q1Question = document.getElementById("q1-question");
+    const q1Sub = document.getElementById("q1-sub");
+    const q1Options = document.getElementById("q1-options");
+    const q1Result = document.getElementById("q1-result");
+    let q1Correct = "";
+
+    function newQ1() {
+        const idx = Math.floor(Math.random() * words.length);
+        const w = words[idx];
+        q1Correct = w.ua;
+        q1Question.textContent = "Англійське слово: " + w.en;
+        q1Sub.textContent = "Вимова: " + w.uaTr + " — вибери правильний переклад українською:";
+        q1Options.innerHTML = "";
+        q1Result.textContent = "";
+        q1Result.className = "quiz-result";
+
+        const opts = new Set();
+        opts.add(w.ua);
+        while (opts.size < 4 && opts.size < words.length) {
+            const w2 = words[Math.floor(Math.random() * words.length)];
+            opts.add(w2.ua);
+        }
+
+        shuffle(Array.from(opts)).forEach(opt => {
+            const btn = document.createElement("button");
+            btn.textContent = opt;
+            btn.className = "option-btn";
+            btn.onclick = () => {
+                if (opt === q1Correct) {
+                    q1Result.textContent = "Правильно! ✔";
+                    q1Result.className = "quiz-result correct";
+                    registerCorrect();
+                } else {
+                    q1Result.textContent = "Не те. Правильна відповідь: " + q1Correct;
+                    q1Result.className = "quiz-result incorrect";
+                    registerIncorrect();
+                }
+            };
+            q1Options.appendChild(btn);
+        });
+    }
+    document.getElementById("q1-new").onclick = newQ1;
+
+    // ===== QUIZ 2: UA -> EN =====
+    const q2Question = document.getElementById("q2-question");
+    const q2Sub = document.getElementById("q2-sub");
+    const q2Options = document.getElementById("q2-options");
+    const q2Result = document.getElementById("q2-result");
+    let q2Correct = "";
+
+    function newQ2() {
+        const idx = Math.floor(Math.random() * words.length);
+        const w = words[idx];
+        q2Correct = w.en;
+        q2Question.textContent = "Українське слово: " + w.ua;
+        q2Sub.textContent = "Вимова англійського слова: " + w.uaTr + " — вибери правильне англійське слово:";
+        q2Options.innerHTML = "";
+        q2Result.textContent = "";
+        q2Result.className = "quiz-result";
+
+        const opts = new Set();
+        opts.add(w.en);
+        while (opts.size < 4 && opts.size < words.length) {
+            const w2 = words[Math.floor(Math.random() * words.length)];
+            opts.add(w2.en);
+        }
+
+        shuffle(Array.from(opts)).forEach(opt => {
+            const btn = document.createElement("button");
+            btn.textContent = opt;
+            btn.className = "option-btn";
+            btn.onclick = () => {
+                if (opt === q2Correct) {
+                    q2Result.textContent = "Супер! ✔";
+                    q2Result.className = "quiz-result correct";
+                    registerCorrect();
+                } else {
+                    q2Result.textContent = "Не те. Правильна відповідь: " + q2Correct;
+                    q2Result.className = "quiz-result incorrect";
+                    registerIncorrect();
+                }
+            };
+            q2Options.appendChild(btn);
+        });
+    }
+    document.getElementById("q2-new").onclick = newQ2;
+
+    // ===== QUIZ 3: TRUE/FALSE =====
+    const q3Question = document.getElementById("q3-question");
+    const q3Sub = document.getElementById("q3-sub");
+    const q3Result = document.getElementById("q3-result");
+    let q3IsCorrectPair = true;
+
+    function newQ3() {
+        const idx = Math.floor(Math.random() * words.length);
+        const w = words[idx];
+
+        const makeCorrect = Math.random() < 0.5;
+        let shownUa;
+        if (makeCorrect) {
+            shownUa = w.ua;
+            q3IsCorrectPair = true;
+        } else {
+            let otherIdx;
+            do {
+                otherIdx = Math.floor(Math.random() * words.length);
+            } while (otherIdx === idx);
+            shownUa = words[otherIdx].ua;
+            q3IsCorrectPair = false;
+        }
+
+        q3Question.textContent = w.en + " — " + shownUa;
+        q3Sub.textContent = "Чи правильно поєднані слово й переклад?";
+        q3Result.textContent = "";
+        q3Result.className = "quiz-result";
+    }
+
+    function answerQ3(userSaysCorrect) {
+        const ok = (userSaysCorrect === q3IsCorrectPair);
+        if (ok) {
+            q3Result.textContent = "Так! Це правильна відповідь ✔";
+            q3Result.className = "quiz-result correct";
+            registerCorrect();
+        } else {
+            q3Result.textContent = "Не зовсім. Спробуй інше запитання 🙂";
+            q3Result.className = "quiz-result incorrect";
+            registerIncorrect();
+        }
+    }
+
+    document.getElementById("q3-yes").onclick = () => answerQ3(true);
+    document.getElementById("q3-no").onclick = () => answerQ3(false);
+    document.getElementById("q3-new").onclick = newQ3;
+
+    // ===== MATCH GAME =====
+    const matchEn = document.getElementById("match-en");
+    const matchUa = document.getElementById("match-ua");
+    const matchResult = document.getElementById("match-result");
+    let matchPairs = [];
+    let selectedEnBtn = null;
+    let selectedUaBtn = null;
+
+    function newMatchGame() {
+        matchEn.innerHTML = "";
+        matchUa.innerHTML = "";
+        matchResult.textContent = "";
+        matchResult.className = "quiz-result";
+
+        const used = new Set();
+        while (used.size < 6 && used.size < words.length) {
+            used.add(Math.floor(Math.random() * words.length));
+        }
+        matchPairs = Array.from(used).map(i => ({
+            index: i,
+            en: words[i].en,
+            ua: words[i].ua
+        }));
+
+        const enOrder = shuffle([...matchPairs]);
+        const uaOrder = shuffle([...matchPairs]);
+
+        selectedEnBtn = null;
+        selectedUaBtn = null;
+
+        enOrder.forEach(p => {
+            const btn = document.createElement("button");
+            btn.textContent = p.en;
+            btn.className = "match-btn";
+            btn.dataset.id = String(p.index);
+            btn.dataset.lang = "en";
+            btn.onclick = () => onMatchClick(btn);
+            matchEn.appendChild(btn);
+        });
+
+        uaOrder.forEach(p => {
+            const btn = document.createElement("button");
+            btn.textContent = p.ua;
+            btn.className = "match-btn";
+            btn.dataset.id = String(p.index);
+            btn.dataset.lang = "ua";
+            btn.onclick = () => onMatchClick(btn);
+            matchUa.appendChild(btn);
+        });
+    }
+
+    function onMatchClick(btn) {
+        if (btn.classList.contains("matched")) return;
+        const lang = btn.dataset.lang;
+        if (lang === "en") {
+            if (selectedEnBtn && selectedEnBtn !== btn) {
+                selectedEnBtn.classList.remove("selected");
+            }
+            selectedEnBtn = btn;
+            btn.classList.toggle("selected");
+            if (!btn.classList.contains("selected")) {
+                selectedEnBtn = null;
+            }
+        } else {
+            if (selectedUaBtn && selectedUaBtn !== btn) {
+                selectedUaBtn.classList.remove("selected");
+            }
+            selectedUaBtn = btn;
+            btn.classList.toggle("selected");
+            if (!btn.classList.contains("selected")) {
+                selectedUaBtn = null;
+            }
+        }
+
+        if (selectedEnBtn && selectedUaBtn) {
+            checkMatchPair();
+        }
+    }
+
+    function checkMatchPair() {
+        const idEn = selectedEnBtn.dataset.id;
+        const idUa = selectedUaBtn.dataset.id;
+
+        if (idEn === idUa) {
+            selectedEnBtn.classList.remove("selected");
+            selectedUaBtn.classList.remove("selected");
+            selectedEnBtn.classList.add("matched");
+            selectedUaBtn.classList.add("matched");
+            selectedEnBtn = null;
+            selectedUaBtn = null;
+
+            registerCorrect();
+
+            const remaining = document.querySelectorAll(".match-btn:not(.matched)");
+            if (remaining.length === 0) {
+                matchResult.textContent = "Ура! Усі пари знайдено! 🎄";
+                matchResult.className = "quiz-result correct";
+            } else {
+                matchResult.textContent = "Є збіг! Продовжуй 🙂";
+                matchResult.className = "quiz-result correct";
+            }
+        } else {
+            matchResult.textContent = "Не та пара. Спробуй ще.";
+            matchResult.className = "quiz-result incorrect";
+            registerIncorrect();
+            const enBtn = selectedEnBtn;
+            const uaBtn = selectedUaBtn;
+            setTimeout(() => {
+                enBtn.classList.remove("selected");
+                uaBtn.classList.remove("selected");
+                if (selectedEnBtn === enBtn) selectedEnBtn = null;
+                if (selectedUaBtn === uaBtn) selectedUaBtn = null;
+            }, 400);
+        }
+    }
+
+    document.getElementById("match-new").onclick = newMatchGame;
+
+    // ===== BUILD WORD GAME =====
+    const buildHint = document.getElementById("buildword-hint");
+    const buildTarget = document.getElementById("buildword-target");
+    const buildLetters = document.getElementById("buildword-letters");
+    const buildResult = document.getElementById("buildword-result");
+    const buildClearBtn = document.getElementById("buildword-clear");
+    const buildNewBtn = document.getElementById("buildword-new");
+
+    // Only simple one-word entries (letters only, length 3–12)
+    const buildWordsPool = words.filter(w =>
+        /^[a-zA-Z ]+$/.test(w.en) &&
+        w.en.replace(/ /g, "").length >= 3 &&
+        w.en.replace(/ /g, "").length <= 12
+    );
+
+    let buildCurrentWord = null;
+    let buildCurrentAnswer = "";
+
+    function launchFireworks() {
+        for (let i = 0; i < 18; i++) {
+            const span = document.createElement("span");
+            span.className = "fw";
+            span.textContent = "🎆";
+
+            const left = 10 + Math.random() * 80;
+            const top = 40 + Math.random() * 30;
+
+            span.style.left = left + "vw";
+            span.style.top = top + "vh";
+
+            document.body.appendChild(span);
+
+            setTimeout(() => {
+                span.remove();
+            }, 1000);
+        }
+    }
+
+    function renderBuildSlots() {
+        if (!buildCurrentWord) return;
+        const target = buildCurrentWord.replace(/ /g, "");
+        const len = target.length;
+        const filled = buildCurrentAnswer.toUpperCase();
+        let html = "";
+
+        for (let i = 0; i < len; i++) {
+            const ch = filled[i] || "_";
+            html += `<span class="build-slot">${ch}</span>`;
+        }
+
+        buildTarget.innerHTML = html;
+    }
+
+    function clearBuildWord() {
+        buildCurrentAnswer = "";
+        buildResult.textContent = "";
+        buildResult.className = "quiz-result";
+        renderBuildSlots();
+
+        const buttons = buildLetters.querySelectorAll("button");
+        buttons.forEach(btn => {
+            btn.disabled = false;
+            btn.style.opacity = "1";
+        });
+    }
+
+    function newBuildWordRound() {
+        clearBuildWord();
+        if (buildWordsPool.length === 0) return;
+
+        const idx = Math.floor(Math.random() * buildWordsPool.length);
+        const w = buildWordsPool[idx];
+
+        buildCurrentWord = w.en.toUpperCase();
+        buildCurrentAnswer = "";
+
+        buildHint.textContent = `Переклад: ${w.ua} | Вимова: ${w.uaTr}`;
+        buildResult.textContent = "";
+        buildResult.className = "quiz-result";
+
+        renderBuildSlots();
+
+        buildLetters.innerHTML = "";
+        const target = buildCurrentWord.replace(/ /g, "");
+        const letters = target.split("");
+        shuffle(letters);
+
+        letters.forEach((ch, index) => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.textContent = ch;
+            btn.dataset.letterIndex = String(index);
+
+            btn.onclick = () => {
+                if (btn.disabled) return;
+
+                buildCurrentAnswer += ch;
+                btn.disabled = true;
+                btn.style.opacity = "0.4";
+
+                renderBuildSlots();
+
+                if (buildCurrentAnswer.length === target.length) {
+                    if (buildCurrentAnswer.toUpperCase() === target) {
+                        buildResult.textContent = "Чудово! Слово складено правильно! 🎉";
+                        buildResult.className = "quiz-result correct";
+                        registerCorrect();
+                        launchFireworks();
+                    } else {
+                        buildResult.textContent = `Не зовсім. Правильне слово: ${buildCurrentWord}`;
+                        buildResult.className = "quiz-result incorrect";
+                        registerIncorrect();
+                    }
+                }
+            };
+
+            buildLetters.appendChild(btn);
+        });
+    }
+
+    buildClearBtn.onclick = clearBuildWord;
+    buildNewBtn.onclick = newBuildWordRound;
+
+    // ===== BIG CROSSWORD =====
+    const GRID_SIZE = 12;
+    const MAX_WORDS_IN_CROSS = 15;
+
+    let crossSolution = [];
+    let crossNumbers = [];
+    let crossWordsPlaced = [];
+    let activeCell = null;
+
+    const crossGridDiv = document.getElementById("cross-grid");
+    const crossPaletteDiv = document.getElementById("cross-palette");
+    const crossCluesDiv = document.getElementById("cross-clues");
+    const crossResult = document.getElementById("cross-result");
+
+    function createEmptyGrid() {
+        const grid = [];
+        for (let r = 0; r < GRID_SIZE; r++) {
+            const row = [];
+            for (let c = 0; c < GRID_SIZE; c++) {
+                row.push(null);
+            }
+            grid.push(row);
+        }
+        return grid;
+    }
+
+    function shuffleIndices(n) {
+        const arr = [];
+        for (let i = 0; i < n; i++) arr.push(i);
+        return shuffle(arr);
+    }
+
+    function canPlaceWord(grid, word, row, col, dir) {
+        const len = word.length;
+        if (dir === "across") {
+            if (col + len > GRID_SIZE) return false;
+        } else {
+            if (row + len > GRID_SIZE) return false;
+        }
+
+        for (let i = 0; i < len; i++) {
+            const r = row + (dir === "down" ? i : 0);
+            const c = col + (dir === "across" ? i : 0);
+            const cell = grid[r][c];
+            if (cell !== null && cell !== word[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function placeWordOnGrid(grid, word, row, col, dir) {
+        for (let i = 0; i < word.length; i++) {
+            const r = row + (dir === "down" ? i : 0);
+            const c = col + (dir === "across" ? i : 0);
+            grid[r][c] = word[i];
+        }
+    }
+
+    function generateCrosswordData() {
+        let grid = createEmptyGrid();
+        let placed = [];
+
+        const indices = shuffleIndices(words.length);
+        let wordCount = 0;
+
+        for (let idx of indices) {
+            const entry = words[idx];
+            let word = entry.en.toUpperCase().replace(/[^A-Z]/g, "");
+            if (word.length < 3 || word.length > GRID_SIZE) continue;
+
+            let placedThis = false;
+            for (let attempt = 0; attempt < 60 && !placedThis; attempt++) {
+                const dir = Math.random() < 0.5 ? "across" : "down";
+                const row = Math.floor(Math.random() * GRID_SIZE);
+                const col = Math.floor(Math.random() * GRID_SIZE);
+
+                if (canPlaceWord(grid, word, row, col, dir)) {
+                    placeWordOnGrid(grid, word, row, col, dir);
+                    placed.push({
+                        answer: word,
+                        clueUa: entry.ua,
+                        dir: dir,
+                        row: row,
+                        col: col
+                    });
+                    placedThis = true;
+                    wordCount++;
+                    if (wordCount >= MAX_WORDS_IN_CROSS) break;
+                }
+            }
+            if (wordCount >= MAX_WORDS_IN_CROSS) break;
+        }
+
+        return { grid, placed };
+    }
+
+    function numberCrosswordWords(grid, placed) {
+        const numbers = Array.from({ length: GRID_SIZE }, () =>
+            Array(GRID_SIZE).fill(null)
+        );
+
+        let currentNumber = 1;
+        placed.forEach(p => {
+            const r = p.row;
+            const c = p.col;
+            if (p.dir === "across") {
+                const start = (c === 0 || grid[r][c - 1] === null);
+                if (start) {
+                    p.num = currentNumber;
+                    numbers[r][c] = currentNumber;
+                    currentNumber++;
+                }
+            } else {
+                const start = (r === 0 || grid[r - 1][c] === null);
+                if (start) {
+                    p.num = currentNumber;
+                    numbers[r][c] = currentNumber;
+                    currentNumber++;
+                }
+            }
+        });
+
+        return numbers;
+    }
+
+    function buildCrosswordDOM() {
+        crossGridDiv.innerHTML = "";
+        crossCluesDiv.innerHTML = "";
+        crossResult.textContent = "";
+        crossResult.className = "quiz-result";
+
+        const grid = crossSolution;
+        const numbers = crossNumbers;
+
+        for (let r = 0; r < GRID_SIZE; r++) {
+            const rowDiv = document.createElement("div");
+            rowDiv.className = "cross-row";
+
+            for (let c = 0; c < GRID_SIZE; c++) {
+                const letter = grid[r][c];
+                if (letter === null) {
+                    const block = document.createElement("div");
+                    block.className = "cross-block";
+                    rowDiv.appendChild(block);
+                } else {
+                    const wrapper = document.createElement("div");
+                    wrapper.className = "cross-cell cross-number";
+
+                    const input = document.createElement("input");
+                    input.type = "text";
+                    input.maxLength = 1;
+                    input.dataset.row = String(r);
+                    input.dataset.col = String(c);
+
+                    input.oninput = () => {
+                        input.value = input.value.toUpperCase().replace(/[^A-Z]/g, "");
+                    };
+                    input.onclick = () => {
+                        activeCell = input;
+                    };
+                    input.onfocus = () => {
+                        activeCell = input;
+                    };
+
+                    wrapper.appendChild(input);
+
+                    const num = numbers[r][c];
+                    if (num !== null) {
+                        const numSpan = document.createElement("span");
+                        numSpan.textContent = num;
+                        wrapper.appendChild(numSpan);
+                    }
+
+                    rowDiv.appendChild(wrapper);
+                }
+            }
+
+            crossGridDiv.appendChild(rowDiv);
+        }
+
+        const across = [];
+        const down = [];
+
+        crossWordsPlaced.forEach(p => {
+            if (!p.num) return;
+            const item = { num: p.num, clue: p.clueUa };
+            if (p.dir === "across") across.push(item);
+            else down.push(item);
+        });
+
+        across.sort((a, b) => a.num - b.num);
+        down.sort((a, b) => a.num - b.num);
+
+        const acrossDiv = document.createElement("div");
+        const downDiv = document.createElement("div");
+
+        const acrossTitle = document.createElement("div");
+        acrossTitle.className = "clue-column-title";
+        acrossTitle.textContent = "По горизонталі";
+        acrossDiv.appendChild(acrossTitle);
+
+        across.forEach(cl => {
+            const cd = document.createElement("div");
+            cd.className = "clue-item";
+            cd.textContent = cl.num + ". " + cl.clue;
+            acrossDiv.appendChild(cd);
+        });
+
+        const downTitle = document.createElement("div");
+        downTitle.className = "clue-column-title";
+        downTitle.textContent = "По вертикалі";
+        downDiv.appendChild(downTitle);
+
+        down.forEach(cl => {
+            const cd = document.createElement("div");
+            cd.className = "clue-item";
+            cd.textContent = cl.num + ". " + cl.clue;
+            downDiv.appendChild(cd);
+        });
+
+        crossCluesDiv.appendChild(acrossDiv);
+        crossCluesDiv.appendChild(downDiv);
+    }
+
+    function buildPalette() {
+        crossPaletteDiv.innerHTML = "";
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        for (let i = 0; i < letters.length; i++) {
+            const ch = letters[i];
+            const btn = document.createElement("button");
+            btn.className = "palette-btn";
+            btn.textContent = ch;
+            btn.onclick = () => {
+                if (activeCell) {
+                    activeCell.value = ch;
+                    const row = parseInt(activeCell.dataset.row, 10);
+                    const col = parseInt(activeCell.dataset.col, 10);
+
+                    let next = null;
+                    for (let c = col + 1; c < GRID_SIZE; c++) {
+                        const selector = 'input[data-row="' + row + '"][data-col="' + c + '"]';
+                        const candidate = crossGridDiv.querySelector(selector);
+                        if (candidate) {
+                            next = candidate;
+                            break;
+                        }
+                    }
+                    if (next) {
+                        next.focus();
+                        activeCell = next;
+                    }
+                }
+            };
+            crossPaletteDiv.appendChild(btn);
+        }
+    }
+
+    function checkCrossword() {
+        let allFilled = true;
+        let allCorrect = true;
+
+        const inputs = crossGridDiv.querySelectorAll("input");
+        inputs.forEach(input => {
+            const r = parseInt(input.dataset.row, 10);
+            const c = parseInt(input.dataset.col, 10);
+            const correctLetter = crossSolution[r][c];
+            const val = (input.value || "").toUpperCase();
+
+            if (val === "") {
+                allFilled = false;
+            }
+
+            if (val === correctLetter) {
+                input.style.backgroundColor = "rgba(40, 120, 40, 0.85)";
+            } else {
+                input.style.backgroundColor = "rgba(140, 40, 40, 0.85)";
+                allCorrect = false;
+            }
+        });
+
+        if (allCorrect && allFilled) {
+            crossResult.textContent = "Весь кросворд заповнений правильно! 🎄✨";
+            crossResult.className = "quiz-result correct";
+            registerCorrect();
+        } else if (!allFilled) {
+            crossResult.textContent = "Є порожні клітинки або помилки. Спробуй ще.";
+            crossResult.className = "quiz-result incorrect";
+            registerIncorrect();
+        } else {
+            crossResult.textContent = "Є помилки. Червоні клітинки потрібно виправити.";
+            crossResult.className = "quiz-result incorrect";
+            registerIncorrect();
+        }
+    }
+
+    function showCrossAnswers() {
+        const inputs = crossGridDiv.querySelectorAll("input");
+        inputs.forEach(input => {
+            const r = parseInt(input.dataset.row, 10);
+            const c = parseInt(input.dataset.col, 10);
+            const correctLetter = crossSolution[r][c];
+            input.value = correctLetter;
+            input.style.backgroundColor = "rgba(40, 120, 40, 0.85)";
+        });
+        crossResult.textContent = "Відповіді показані.";
+        crossResult.className = "quiz-result correct";
+    }
+
+    function newCrossword() {
+        let data = generateCrosswordData();
+        crossSolution = data.grid;
+        crossWordsPlaced = data.placed;
+        crossNumbers = numberCrosswordWords(crossSolution, crossWordsPlaced);
+        buildCrosswordDOM();
+        buildPalette();
+    }
+
+    document.getElementById("cross-new").onclick = newCrossword;
+    document.getElementById("cross-check").onclick = checkCrossword;
+    document.getElementById("cross-show").onclick = showCrossAnswers;
+
+    // ===== INIT =====
+    updateFlashcard();
+    newQ1();
+    newQ2();
+    newQ3();
+    newMatchGame();
+    newBuildWordRound();
+    newCrossword();
+</script>
+</body>
+</html>
+

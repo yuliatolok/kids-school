@@ -546,411 +546,1203 @@ export default function ParentDashboard() {
 
   return (
 
-    <div style={{ padding: 40 }}>
+    <div style={{
 
-      <h1>Кабінет батьків</h1>
+      minHeight: "100vh",
 
-      <p>Ви увійшли як: {appUser?.displayName ?? appUser?.id}</p>
+      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
 
-      <button onClick={logout}>Вийти</button>
+      padding: "40px 20px",
 
+      position: "relative",
 
+      overflow: "hidden"
 
-      <hr style={{ margin: "20px 0" }} />
+    }}>
 
+      <style>{`
 
+        @keyframes float {
 
-      <h2>Створити нове завдання</h2>
+          0%, 100% { transform: translateY(0px); }
 
-      <form onSubmit={handleCreateTask} style={{ maxWidth: 480 }}>
+          50% { transform: translateY(-20px); }
 
-        <div style={{ marginBottom: 8 }}>
+        }
 
-          <label>
+        @keyframes fadeIn {
 
-            Назва:
+          from { opacity: 0; transform: translateY(20px); }
 
-            <input
+          to { opacity: 1; transform: translateY(0); }
 
-              style={{ width: "100%", padding: 6 }}
+        }
 
-              value={title}
+        .task-card {
 
-              onChange={e => setTitle(e.target.value)}
+          animation: fadeIn 0.4s ease-out;
 
-            />
+        }
 
-          </label>
-
-        </div>
-
-
-
-        <div style={{ marginBottom: 8 }}>
-
-          <label>
-
-            Опис (необов'язково):
-
-            <input
-
-              style={{ width: "100%", padding: 6 }}
-
-              value={description}
-
-              onChange={e => setDescription(e.target.value)}
-
-            />
-
-          </label>
-
-        </div>
+      `}</style>
 
 
 
-        <div style={{ marginBottom: 8 }}>
+      {/* Animated background */}
 
-          <label>
+      <div style={{
 
-            Посилання на HTML:
+        position: "absolute",
 
-            <input
+        top: "-50%",
 
-              style={{ width: "100%", padding: 6 }}
+        left: "-50%",
 
-              value={htmlUrl}
+        width: "200%",
 
-              onChange={e => setHtmlUrl(e.target.value)}
+        height: "200%",
 
-            />
+        background: "radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px)",
 
-          </label>
+        backgroundSize: "50px 50px",
 
-          <div style={{ fontSize: 12 }}>
+        animation: "float 20s infinite linear",
 
-            Напр.: <code>/tasks/christmas-trainer.html</code>
+        pointerEvents: "none"
+
+      }} />
+
+
+
+      <div style={{
+
+        maxWidth: "1200px",
+
+        margin: "0 auto",
+
+        position: "relative",
+
+        zIndex: 1
+
+      }}>
+
+        {/* Header */}
+
+        <div style={{
+
+          background: "rgba(255, 255, 255, 0.95)",
+
+          backdropFilter: "blur(20px)",
+
+          borderRadius: "20px",
+
+          padding: "30px 40px",
+
+          marginBottom: "30px",
+
+          boxShadow: "0 10px 40px rgba(0,0,0,0.2)",
+
+          display: "flex",
+
+          justifyContent: "space-between",
+
+          alignItems: "center",
+
+          flexWrap: "wrap",
+
+          gap: "20px"
+
+        }}>
+
+          <div>
+
+            <h1 style={{
+
+              margin: 0,
+
+              fontSize: "2.5em",
+
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+
+              WebkitBackgroundClip: "text",
+
+              WebkitTextFillColor: "transparent",
+
+              backgroundClip: "text"
+
+            }}>
+
+              👨‍👩‍👧 Кабінет батьків
+
+            </h1>
+
+            <p style={{
+
+              margin: "10px 0 0",
+
+              color: "#666",
+
+              fontSize: "1.1em"
+
+            }}>
+
+              Привіт, {appUser?.displayName ?? appUser?.id}! 👋
+
+            </p>
 
           </div>
 
+          <button
+
+            onClick={logout}
+
+            style={{
+
+              padding: "12px 30px",
+
+              fontSize: "1em",
+
+              fontWeight: "600",
+
+              color: "#667eea",
+
+              background: "white",
+
+              border: "2px solid #667eea",
+
+              borderRadius: "50px",
+
+              cursor: "pointer",
+
+              transition: "all 0.3s ease",
+
+              boxShadow: "0 4px 15px rgba(102, 126, 234, 0.2)"
+
+            }}
+
+            onMouseOver={(e) => {
+
+              e.currentTarget.style.background = "#667eea";
+
+              e.currentTarget.style.color = "white";
+
+              e.currentTarget.style.transform = "translateY(-2px)";
+
+            }}
+
+            onMouseOut={(e) => {
+
+              e.currentTarget.style.background = "white";
+
+              e.currentTarget.style.color = "#667eea";
+
+              e.currentTarget.style.transform = "translateY(0)";
+
+            }}
+
+          >
+
+            Вийти
+
+          </button>
+
         </div>
 
 
 
-        <div style={{ marginBottom: 8 }}>
+        {/* Create Task Form */}
 
-          <label>
+        <div style={{
 
-            Email учнів (необов'язково, через кому):
+          background: "rgba(255, 255, 255, 0.95)",
 
-            <input
+          backdropFilter: "blur(20px)",
 
-              style={{ width: "100%", padding: 6 }}
+          borderRadius: "20px",
 
-              value={targetEmails}
+          padding: "40px",
 
-              onChange={e => setTargetEmails(e.target.value)}
+          marginBottom: "30px",
 
-              placeholder="email1@example.com, email2@example.com"
+          boxShadow: "0 10px 40px rgba(0,0,0,0.2)"
 
-            />
+        }}>
 
-          </label>
+          <h2 style={{
 
-          <div style={{ fontSize: 12, color: "#666" }}>
+            margin: "0 0 25px",
 
-            Залиште порожнім, щоб завдання було видиме всім учням
+            fontSize: "2em",
 
-          </div>
+            color: "#333",
+
+            display: "flex",
+
+            alignItems: "center",
+
+            gap: "10px"
+
+          }}>
+
+            ➕ Створити нове завдання
+
+          </h2>
+
+
+
+          <form onSubmit={handleCreateTask} style={{ maxWidth: "100%" }}>
+
+            <div style={{ marginBottom: "20px" }}>
+
+              <label style={{
+
+                display: "block",
+
+                marginBottom: "8px",
+
+                fontWeight: "600",
+
+                color: "#333",
+
+                fontSize: "1em"
+
+              }}>
+
+                Назва:
+
+              </label>
+
+              <input
+
+                style={{
+
+                  width: "100%",
+
+                  padding: "12px 16px",
+
+                  borderRadius: "10px",
+
+                  border: "2px solid #e0e0e0",
+
+                  fontSize: "1em",
+
+                  transition: "all 0.3s ease",
+
+                  boxSizing: "border-box"
+
+                }}
+
+                value={title}
+
+                onChange={e => setTitle(e.target.value)}
+
+                onFocus={(e) => e.currentTarget.style.borderColor = "#667eea"}
+
+                onBlur={(e) => e.currentTarget.style.borderColor = "#e0e0e0"}
+
+                required
+
+              />
+
+            </div>
+
+
+
+            <div style={{ marginBottom: "20px" }}>
+
+              <label style={{
+
+                display: "block",
+
+                marginBottom: "8px",
+
+                fontWeight: "600",
+
+                color: "#333",
+
+                fontSize: "1em"
+
+              }}>
+
+                Опис (необов'язково):
+
+              </label>
+
+              <input
+
+                style={{
+
+                  width: "100%",
+
+                  padding: "12px 16px",
+
+                  borderRadius: "10px",
+
+                  border: "2px solid #e0e0e0",
+
+                  fontSize: "1em",
+
+                  transition: "all 0.3s ease",
+
+                  boxSizing: "border-box"
+
+                }}
+
+                value={description}
+
+                onChange={e => setDescription(e.target.value)}
+
+                onFocus={(e) => e.currentTarget.style.borderColor = "#667eea"}
+
+                onBlur={(e) => e.currentTarget.style.borderColor = "#e0e0e0"}
+
+              />
+
+            </div>
+
+
+
+            <div style={{ marginBottom: "20px" }}>
+
+              <label style={{
+
+                display: "block",
+
+                marginBottom: "8px",
+
+                fontWeight: "600",
+
+                color: "#333",
+
+                fontSize: "1em"
+
+              }}>
+
+                Посилання на HTML:
+
+              </label>
+
+              <input
+
+                style={{
+
+                  width: "100%",
+
+                  padding: "12px 16px",
+
+                  borderRadius: "10px",
+
+                  border: "2px solid #e0e0e0",
+
+                  fontSize: "1em",
+
+                  transition: "all 0.3s ease",
+
+                  boxSizing: "border-box"
+
+                }}
+
+                value={htmlUrl}
+
+                onChange={e => setHtmlUrl(e.target.value)}
+
+                onFocus={(e) => e.currentTarget.style.borderColor = "#667eea"}
+
+                onBlur={(e) => e.currentTarget.style.borderColor = "#e0e0e0"}
+
+                required
+
+              />
+
+              <div style={{ fontSize: "0.85em", color: "#666", marginTop: "6px" }}>
+
+                Напр.: <code style={{ background: "#f5f5f5", padding: "2px 6px", borderRadius: "4px" }}>/tasks/christmas-trainer.html</code>
+
+              </div>
+
+            </div>
+
+
+
+            <div style={{ marginBottom: "25px" }}>
+
+              <label style={{
+
+                display: "block",
+
+                marginBottom: "8px",
+
+                fontWeight: "600",
+
+                color: "#333",
+
+                fontSize: "1em"
+
+              }}>
+
+                Email учнів (необов'язково, через кому):
+
+              </label>
+
+              <input
+
+                style={{
+
+                  width: "100%",
+
+                  padding: "12px 16px",
+
+                  borderRadius: "10px",
+
+                  border: "2px solid #e0e0e0",
+
+                  fontSize: "1em",
+
+                  transition: "all 0.3s ease",
+
+                  boxSizing: "border-box"
+
+                }}
+
+                value={targetEmails}
+
+                onChange={e => setTargetEmails(e.target.value)}
+
+                placeholder="email1@example.com, email2@example.com"
+
+                onFocus={(e) => e.currentTarget.style.borderColor = "#667eea"}
+
+                onBlur={(e) => e.currentTarget.style.borderColor = "#e0e0e0"}
+
+              />
+
+              <div style={{ fontSize: "0.85em", color: "#666", marginTop: "6px" }}>
+
+                Залиште порожнім, щоб завдання було видиме всім учням
+
+              </div>
+
+            </div>
+
+
+
+            <button
+
+              type="submit"
+
+              disabled={loading}
+
+              style={{
+
+                padding: "14px 35px",
+
+                fontSize: "1.1em",
+
+                fontWeight: "600",
+
+                color: "white",
+
+                background: loading
+
+                  ? "linear-gradient(135deg, #999 0%, #777 100%)"
+
+                  : "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+
+                border: "none",
+
+                borderRadius: "50px",
+
+                cursor: loading ? "not-allowed" : "pointer",
+
+                transition: "all 0.3s ease",
+
+                boxShadow: "0 6px 20px rgba(102, 126, 234, 0.3)"
+
+              }}
+
+              onMouseOver={(e) => {
+
+                if (!loading) {
+
+                  e.currentTarget.style.transform = "translateY(-2px)";
+
+                  e.currentTarget.style.boxShadow = "0 8px 25px rgba(102, 126, 234, 0.4)";
+
+                }
+
+              }}
+
+              onMouseOut={(e) => {
+
+                if (!loading) {
+
+                  e.currentTarget.style.transform = "translateY(0)";
+
+                  e.currentTarget.style.boxShadow = "0 6px 20px rgba(102, 126, 234, 0.3)";
+
+                }
+
+              }}
+
+            >
+
+              {loading ? "⏳ Зберігаю..." : "✨ Створити завдання"}
+
+            </button>
+
+          </form>
 
         </div>
 
 
 
-        <button type="submit" disabled={loading}>
+        {/* Tasks List */}
 
-          {loading ? "Зберігаю..." : "Створити завдання"}
+        <div style={{
 
-        </button>
+          background: "rgba(255, 255, 255, 0.95)",
 
-      </form>
+          backdropFilter: "blur(20px)",
+
+          borderRadius: "20px",
+
+          padding: "40px",
+
+          boxShadow: "0 10px 40px rgba(0,0,0,0.2)"
+
+        }}>
+
+          <h2 style={{
+
+            margin: "0 0 30px",
+
+            fontSize: "2em",
+
+            color: "#333",
+
+            display: "flex",
+
+            alignItems: "center",
+
+            gap: "10px"
+
+          }}>
+
+            📋 Мої завдання
+
+          </h2>
 
 
 
-      <hr style={{ margin: "20px 0" }} />
+          {tasks.length === 0 ? (
 
+            <div style={{
 
+              textAlign: "center",
 
-      <h2>Мої завдання</h2>
+              padding: "60px 20px",
 
-      {tasks.length === 0 && <p>Поки що немає завдань.</p>}
+              color: "#999"
 
-      <ul style={{ listStyle: "none", padding: 0 }}>
+            }}>
 
-        {tasks.map(t => {
+              <div style={{ fontSize: "4em", marginBottom: "20px" }}>📝</div>
 
-          const stats = taskStats[t.id];
+              <p style={{ fontSize: "1.2em", margin: 0 }}>Поки що немає завдань.</p>
 
-          const isEditing = editingTask === t.id;
+              <p style={{ fontSize: "0.9em", marginTop: "10px" }}>Створіть перше завдання вище!</p>
 
-          return (
+            </div>
 
-            <li key={t.id} style={{ marginBottom: 16, padding: 16, background: isEditing ? "#fff9e6" : "#f5f5f5", borderRadius: 8, border: isEditing ? "2px solid #ff9800" : "1px solid #ddd" }}>
+          ) : (
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+
+              {tasks.map(t => {
+
+                const stats = taskStats[t.id];
+
+                const isEditing = editingTask === t.id;
+
+                return (
+
+                  <div
+
+                    key={t.id}
+
+                    className="task-card"
+
+                    style={{
+
+                      padding: "25px",
+
+                      background: isEditing
+
+                        ? "linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 152, 0, 0.15) 100%)"
+
+                        : "linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)",
+
+                      borderRadius: "15px",
+
+                      border: isEditing ? "2px solid #ff9800" : "2px solid rgba(102, 126, 234, 0.2)",
+
+                      transition: "all 0.3s ease"
+
+                    }}
+
+                  >
 
               {isEditing ? (
 
-                <form onSubmit={(e) => handleUpdateTask(e, t.id)} style={{ maxWidth: "100%" }}>
+                    <form onSubmit={(e) => handleUpdateTask(e, t.id)} style={{ maxWidth: "100%" }}>
 
-                  <div style={{ marginBottom: 8 }}>
+                      <div style={{ marginBottom: "15px" }}>
 
-                    <label>
+                        <label style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "#333" }}>
 
-                      Назва:
+                          Назва:
 
-                      <input
+                        </label>
 
-                        style={{ width: "100%", padding: 6, marginTop: 4 }}
+                        <input
 
-                        value={editTitle}
+                          style={{
 
-                        onChange={e => setEditTitle(e.target.value)}
+                            width: "100%",
 
-                        required
+                            padding: "10px 14px",
 
-                      />
+                            borderRadius: "8px",
 
-                    </label>
+                            border: "2px solid #e0e0e0",
 
-                  </div>
+                            fontSize: "1em",
 
-                  <div style={{ marginBottom: 8 }}>
+                            boxSizing: "border-box"
 
-                    <label>
+                          }}
 
-                      Опис (необов'язково):
+                          value={editTitle}
 
-                      <input
+                          onChange={e => setEditTitle(e.target.value)}
 
-                        style={{ width: "100%", padding: 6, marginTop: 4 }}
+                          required
 
-                        value={editDescription}
-
-                        onChange={e => setEditDescription(e.target.value)}
-
-                      />
-
-                    </label>
-
-                  </div>
-
-                  <div style={{ marginBottom: 8 }}>
-
-                    <label>
-
-                      Посилання на HTML:
-
-                      <input
-
-                        style={{ width: "100%", padding: 6, marginTop: 4 }}
-
-                        value={editHtmlUrl}
-
-                        onChange={e => setEditHtmlUrl(e.target.value)}
-
-                        required
-
-                      />
-
-                    </label>
-
-                  </div>
-
-                  <div style={{ marginBottom: 12 }}>
-
-                    <label>
-
-                      Email учнів (необов'язково, через кому):
-
-                      <input
-
-                        style={{ width: "100%", padding: 6, marginTop: 4 }}
-
-                        value={editTargetEmails}
-
-                        onChange={e => setEditTargetEmails(e.target.value)}
-
-                        placeholder="email1@example.com, email2@example.com"
-
-                      />
-
-                    </label>
-
-                    <div style={{ fontSize: 12, color: "#666" }}>
-
-                      Залиште порожнім, щоб завдання було видиме всім учням
-
-                    </div>
-
-                  </div>
-
-                  <div style={{ display: "flex", gap: 8 }}>
-
-                    <button type="submit" disabled={loading} style={{ padding: "8px 16px", background: "#4caf50", color: "white", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "600" }}>
-
-                      {loading ? "Зберігаю..." : "Зберегти"}
-
-                    </button>
-
-                    <button type="button" onClick={cancelEdit} style={{ padding: "8px 16px", background: "#999", color: "white", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "600" }}>
-
-                      Скасувати
-
-                    </button>
-
-                  </div>
-
-                </form>
-
-              ) : (
-
-                <>
-
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
-
-                    <div style={{ flex: 1 }}>
-
-                      <div style={{ marginBottom: 8 }}>
-
-                        <strong style={{ fontSize: "1.1em" }}>{t.title}</strong>{" "}
-
-                        <Link to={`/task/${t.id}`} style={{ marginLeft: 10 }}>Відкрити як учень</Link>
+                        />
 
                       </div>
 
-                      {t.targetUserIds.length > 0 ? (
+                      <div style={{ marginBottom: "15px" }}>
 
-                        <div style={{ fontSize: 13, color: "#555", marginBottom: 8 }}>
+                        <label style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "#333" }}>
 
-                          <strong>Для учнів:</strong> {t.targetUserIds.map(id => userEmails[id] || id).join(", ") || "Не знайдено"}
+                          Опис (необов'язково):
+
+                        </label>
+
+                        <input
+
+                          style={{
+
+                            width: "100%",
+
+                            padding: "10px 14px",
+
+                            borderRadius: "8px",
+
+                            border: "2px solid #e0e0e0",
+
+                            fontSize: "1em",
+
+                            boxSizing: "border-box"
+
+                          }}
+
+                          value={editDescription}
+
+                          onChange={e => setEditDescription(e.target.value)}
+
+                        />
+
+                      </div>
+
+                      <div style={{ marginBottom: "15px" }}>
+
+                        <label style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "#333" }}>
+
+                          Посилання на HTML:
+
+                        </label>
+
+                        <input
+
+                          style={{
+
+                            width: "100%",
+
+                            padding: "10px 14px",
+
+                            borderRadius: "8px",
+
+                            border: "2px solid #e0e0e0",
+
+                            fontSize: "1em",
+
+                            boxSizing: "border-box"
+
+                          }}
+
+                          value={editHtmlUrl}
+
+                          onChange={e => setEditHtmlUrl(e.target.value)}
+
+                          required
+
+                        />
+
+                      </div>
+
+                      <div style={{ marginBottom: "20px" }}>
+
+                        <label style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "#333" }}>
+
+                          Email учнів (необов'язково, через кому):
+
+                        </label>
+
+                        <input
+
+                          style={{
+
+                            width: "100%",
+
+                            padding: "10px 14px",
+
+                            borderRadius: "8px",
+
+                            border: "2px solid #e0e0e0",
+
+                            fontSize: "1em",
+
+                            boxSizing: "border-box"
+
+                          }}
+
+                          value={editTargetEmails}
+
+                          onChange={e => setEditTargetEmails(e.target.value)}
+
+                          placeholder="email1@example.com, email2@example.com"
+
+                        />
+
+                        <div style={{ fontSize: "0.85em", color: "#666", marginTop: "6px" }}>
+
+                          Залиште порожнім, щоб завдання було видиме всім учням
+
+                        </div>
+
+                      </div>
+
+                      <div style={{ display: "flex", gap: "12px" }}>
+
+                        <button
+
+                          type="submit"
+
+                          disabled={loading}
+
+                          style={{
+
+                            padding: "10px 24px",
+
+                            background: loading ? "#999" : "linear-gradient(135deg, #4caf50 0%, #45a049 100%)",
+
+                            color: "white",
+
+                            border: "none",
+
+                            borderRadius: "50px",
+
+                            cursor: loading ? "not-allowed" : "pointer",
+
+                            fontWeight: "600",
+
+                            fontSize: "0.95em",
+
+                            transition: "all 0.3s ease",
+
+                            boxShadow: "0 4px 15px rgba(76, 175, 80, 0.3)"
+
+                          }}
+
+                        >
+
+                          {loading ? "⏳ Зберігаю..." : "✅ Зберегти"}
+
+                        </button>
+
+                        <button
+
+                          type="button"
+
+                          onClick={cancelEdit}
+
+                          style={{
+
+                            padding: "10px 24px",
+
+                            background: "#999",
+
+                            color: "white",
+
+                            border: "none",
+
+                            borderRadius: "50px",
+
+                            cursor: "pointer",
+
+                            fontWeight: "600",
+
+                            fontSize: "0.95em",
+
+                            transition: "all 0.3s ease"
+
+                          }}
+
+                          onMouseOver={(e) => e.currentTarget.style.background = "#777"}
+
+                          onMouseOut={(e) => e.currentTarget.style.background = "#999"}
+
+                        >
+
+                          ❌ Скасувати
+
+                        </button>
+
+                      </div>
+
+                    </form>
+
+                  ) : (
+
+                    <>
+
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "15px", flexWrap: "wrap", gap: "15px" }}>
+
+                        <div style={{ flex: 1, minWidth: "250px" }}>
+
+                          <h3 style={{
+
+                            margin: "0 0 10px",
+
+                            fontSize: "1.4em",
+
+                            color: "#333"
+
+                          }}>
+
+                            {t.title}
+
+                          </h3>
+
+                          {t.description && (
+
+                            <p style={{
+
+                              margin: "0 0 10px",
+
+                              color: "#666",
+
+                              fontSize: "0.95em"
+
+                            }}>
+
+                              {t.description}
+
+                            </p>
+
+                          )}
+
+                          {t.targetUserIds.length > 0 ? (
+
+                            <div style={{
+
+                              fontSize: "0.9em",
+
+                              color: "#555",
+
+                              marginBottom: "10px",
+
+                              padding: "8px 12px",
+
+                              background: "rgba(102, 126, 234, 0.1)",
+
+                              borderRadius: "8px",
+
+                              display: "inline-block"
+
+                            }}>
+
+                              <strong>👥 Для учнів:</strong> {t.targetUserIds.map(id => userEmails[id] || id).join(", ") || "Не знайдено"}
+
+                            </div>
+
+                          ) : (
+
+                            <div style={{
+
+                              fontSize: "0.9em",
+
+                              color: "#888",
+
+                              marginBottom: "10px",
+
+                              padding: "8px 12px",
+
+                              background: "rgba(0,0,0,0.05)",
+
+                              borderRadius: "8px",
+
+                              display: "inline-block"
+
+                            }}>
+
+                              🌍 Для всіх учнів
+
+                            </div>
+
+                          )}
+
+                          <Link
+
+                            to={`/task/${t.id}`}
+
+                            style={{
+
+                              display: "inline-block",
+
+                              marginTop: "10px",
+
+                              padding: "8px 20px",
+
+                              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+
+                              color: "white",
+
+                              textDecoration: "none",
+
+                              borderRadius: "50px",
+
+                              fontWeight: "600",
+
+                              fontSize: "0.9em",
+
+                              transition: "all 0.3s ease",
+
+                              boxShadow: "0 4px 15px rgba(102, 126, 234, 0.3)"
+
+                            }}
+
+                            onMouseOver={(e) => {
+
+                              e.currentTarget.style.transform = "scale(1.05)";
+
+                              e.currentTarget.style.boxShadow = "0 6px 20px rgba(102, 126, 234, 0.4)";
+
+                            }}
+
+                            onMouseOut={(e) => {
+
+                              e.currentTarget.style.transform = "scale(1)";
+
+                              e.currentTarget.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.3)";
+
+                            }}
+
+                          >
+
+                            👁️ Відкрити як учень
+
+                          </Link>
+
+                        </div>
+
+                        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+
+                          <button
+
+                            onClick={() => startEditTask(t)}
+
+                            style={{
+
+                              padding: "10px 20px",
+
+                              background: "linear-gradient(135deg, #2196f3 0%, #1976d2 100%)",
+
+                              color: "white",
+
+                              border: "none",
+
+                              borderRadius: "50px",
+
+                              cursor: "pointer",
+
+                              fontSize: "0.9em",
+
+                              fontWeight: "600",
+
+                              transition: "all 0.3s ease",
+
+                              boxShadow: "0 4px 15px rgba(33, 150, 243, 0.3)"
+
+                            }}
+
+                            onMouseOver={(e) => {
+
+                              e.currentTarget.style.transform = "translateY(-2px)";
+
+                              e.currentTarget.style.boxShadow = "0 6px 20px rgba(33, 150, 243, 0.4)";
+
+                            }}
+
+                            onMouseOut={(e) => {
+
+                              e.currentTarget.style.transform = "translateY(0)";
+
+                              e.currentTarget.style.boxShadow = "0 4px 15px rgba(33, 150, 243, 0.3)";
+
+                            }}
+
+                          >
+
+                            ✏️ Редагувати
+
+                          </button>
+
+                          <button
+
+                            onClick={() => handleDeleteTask(t.id)}
+
+                            style={{
+
+                              padding: "10px 20px",
+
+                              background: "linear-gradient(135deg, #f44336 0%, #d32f2f 100%)",
+
+                              color: "white",
+
+                              border: "none",
+
+                              borderRadius: "50px",
+
+                              cursor: "pointer",
+
+                              fontSize: "0.9em",
+
+                              fontWeight: "600",
+
+                              transition: "all 0.3s ease",
+
+                              boxShadow: "0 4px 15px rgba(244, 67, 54, 0.3)"
+
+                            }}
+
+                            onMouseOver={(e) => {
+
+                              e.currentTarget.style.transform = "translateY(-2px)";
+
+                              e.currentTarget.style.boxShadow = "0 6px 20px rgba(244, 67, 54, 0.4)";
+
+                            }}
+
+                            onMouseOut={(e) => {
+
+                              e.currentTarget.style.transform = "translateY(0)";
+
+                              e.currentTarget.style.boxShadow = "0 4px 15px rgba(244, 67, 54, 0.3)";
+
+                            }}
+
+                          >
+
+                            🗑️ Видалити
+
+                          </button>
+
+                        </div>
+
+                      </div>
+
+                      {stats && stats.totalAttempts > 0 ? (
+
+                        <div style={{
+
+                          marginTop: "20px",
+
+                          padding: "15px",
+
+                          background: "rgba(102, 126, 234, 0.05)",
+
+                          borderRadius: "10px",
+
+                          border: "1px solid rgba(102, 126, 234, 0.2)"
+
+                        }}>
+
+                          <div style={{ fontSize: "0.95em", color: "#333", marginBottom: "8px", fontWeight: "600" }}>📊 Статистика:</div>
+
+                          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "10px", fontSize: "0.9em" }}>
+
+                            <div>Виконано разів: <strong>{stats.totalAttempts}</strong></div>
+
+                            <div>Правильних: <strong style={{ color: "#4caf50" }}>{stats.totalCorrect}</strong></div>
+
+                            <div>Неправильних: <strong style={{ color: "#f44336" }}>{stats.totalIncorrect}</strong></div>
+
+                            <div>Середній час: <strong>{Math.round(stats.avgTimeMs / 1000)} сек</strong></div>
+
+                          </div>
 
                         </div>
 
                       ) : (
 
-                        <div style={{ fontSize: 13, color: "#888", marginBottom: 8 }}>
+                        <div style={{
 
-                          Для всіх учнів
+                          marginTop: "15px",
+
+                          fontSize: "0.9em",
+
+                          color: "#999",
+
+                          fontStyle: "italic"
+
+                        }}>
+
+                          📈 Поки що немає результатів
 
                         </div>
 
                       )}
 
-                    </div>
-
-                    <div style={{ display: "flex", gap: 8 }}>
-
-                      <button
-
-                        onClick={() => startEditTask(t)}
-
-                        style={{
-
-                          padding: "6px 12px",
-
-                          background: "#2196f3",
-
-                          color: "white",
-
-                          border: "none",
-
-                          borderRadius: "6px",
-
-                          cursor: "pointer",
-
-                          fontSize: "13px",
-
-                          fontWeight: "600"
-
-                        }}
-
-                        onMouseOver={(e) => e.currentTarget.style.background = "#1976d2"}
-
-                        onMouseOut={(e) => e.currentTarget.style.background = "#2196f3"}
-
-                      >
-
-                        Редагувати
-
-                      </button>
-
-                      <button
-
-                        onClick={() => handleDeleteTask(t.id)}
-
-                        style={{
-
-                          padding: "6px 12px",
-
-                          background: "#f44336",
-
-                          color: "white",
-
-                          border: "none",
-
-                          borderRadius: "6px",
-
-                          cursor: "pointer",
-
-                          fontSize: "13px",
-
-                          fontWeight: "600"
-
-                        }}
-
-                        onMouseOver={(e) => e.currentTarget.style.background = "#d32f2f"}
-
-                        onMouseOut={(e) => e.currentTarget.style.background = "#f44336"}
-
-                      >
-
-                        Видалити
-
-                      </button>
-
-                    </div>
-
-                  </div>
-
-                  {stats && stats.totalAttempts > 0 ? (
-
-                    <div style={{ fontSize: 14, color: "#666" }}>
-
-                      <div>Виконано разів: <strong>{stats.totalAttempts}</strong></div>
-
-                      <div>Правильних відповідей: <strong style={{ color: "#4caf50" }}>{stats.totalCorrect}</strong></div>
-
-                      <div>Неправильних відповідей: <strong style={{ color: "#f44336" }}>{stats.totalIncorrect}</strong></div>
-
-                      <div>Середній час: <strong>{Math.round(stats.avgTimeMs / 1000)} сек</strong></div>
-
-                    </div>
-
-                  ) : (
-
-                    <div style={{ fontSize: 14, color: "#999" }}>Поки що немає результатів</div>
+                    </>
 
                   )}
 
-                </>
+                  </div>
 
-              )}
+                );
 
-            </li>
+              })}
 
-          );
+            </div>
 
-        })}
+          )}
 
-      </ul>
+        </div>
+
+      </div>
 
     </div>
 
