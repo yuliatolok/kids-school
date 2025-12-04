@@ -204,7 +204,7 @@ export default function LoginPage() {
 
           fontWeight: "700",
 
-          marginBottom: "10px",
+          marginBottom: "20px",
 
           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
 
@@ -212,9 +212,7 @@ export default function LoginPage() {
 
           WebkitTextFillColor: "transparent",
 
-          backgroundClip: "text",
-
-          marginBottom: "20px"
+          backgroundClip: "text"
 
         }}>
 
