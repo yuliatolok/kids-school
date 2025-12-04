@@ -14,11 +14,33 @@ import { useAuth } from "../context/AuthContext";
 
 export default function TaskPage() {
 
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
 
   const navigate = useNavigate();
 
   const { appUser } = useAuth();
+
+
+
+  // защита от отсутствия id в URL
+
+  if (!id) {
+
+    return <div>Завдання не знайдено</div>;
+
+  }
+
+
+
+  // защита от null, как и в ParentDashboard
+
+  if (!appUser) {
+
+    return <div>Завантаження...</div>;
+
+  }
+
+
 
   const [task, setTask] = useState<Task | null>(null);
 
@@ -28,11 +50,13 @@ export default function TaskPage() {
 
   useEffect(() => {
 
-    if (!id) return;
+    // id is already checked at component start
+    // Using non-null assertion since we know it's not undefined here
+    const taskId = id!;
 
     async function loadTask() {
 
-      const ref = doc(db, "tasks", id);
+      const ref = doc(db, "tasks", taskId);
 
       const snap = await getDoc(ref);
 
@@ -70,9 +94,11 @@ export default function TaskPage() {
 
   // Listen for stats from iframe
   useEffect(() => {
-    if (!id || !appUser) return;
 
-
+    // id and appUser are already checked at component start
+    // Using non-null assertion since we know they're not null/undefined here
+    const taskId = id!;
+    const currentUser = appUser!;
 
     function handleMessage(event: MessageEvent) {
 
@@ -90,9 +116,9 @@ export default function TaskPage() {
 
       addDoc(collection(db, "taskResults"), {
 
-        taskId: id,
+        taskId: taskId,
 
-        userId: appUser.id,
+        userId: currentUser.id,
 
         correct,
 

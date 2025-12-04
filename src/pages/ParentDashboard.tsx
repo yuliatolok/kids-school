@@ -16,6 +16,18 @@ export default function ParentDashboard() {
 
   const { appUser, logout } = useAuth();
 
+
+
+  // защита от null, TypeScript перестаёт ругаться
+
+  if (!appUser) {
+
+    return <div>Завантаження...</div>;
+
+  }
+
+
+
   const [title, setTitle] = useState("");
 
   const [htmlUrl, setHtmlUrl] = useState("/tasks/christmas-trainer.html");
@@ -55,7 +67,7 @@ export default function ParentDashboard() {
 
     if (!appUser) return;
 
-
+    const userId = appUser.id; // Store in local variable for TypeScript
 
     async function loadTasks() {
 
@@ -63,7 +75,7 @@ export default function ParentDashboard() {
 
         collection(db, "tasks"),
 
-        where("createdBy", "==", appUser.id)
+        where("createdBy", "==", userId)
 
       );
 
